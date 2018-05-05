@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import pygame
+import animacao_personagem
+
 pygame.init()
 
 comprimento_display = 800
@@ -16,7 +18,7 @@ tela = pygame.display.set_mode((comprimento_display,altura_display))
 pygame.display.set_caption('nome do jogo')
 relogio = pygame.time.Clock()
 #imagem do personagem
-personagemImg = pygame.image.load('TRECO.png')
+personagemImg = animacao_personagem.Serge((150, 150))
 
 def texto(texto, fonte):
     tipo_texto = fonte.render(texto, True, preto)
@@ -66,21 +68,21 @@ def gameloop():
 
     #enquanto o jogo esta aberto
     while not fora_do_jogo:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                fora_do_jogo = True
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_LEFT:
-                    mudanca_x = -5
-                elif evento.key == pygame.K_RIGHT:
-                    mudanca_x = 5
-            if evento.type == pygame.KEYUP:
-                if evento.key == pygame.K_LEFT or evento.key == pygame.K_RIGHT:
-                    mudanca_x = 0
+	
+	for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+            	    fora_do_jogo = True
+ 
+    	personagemImg.handle_event(event)                 
+    	tela.fill(pygame.Color('blue'))  
+    	tela.blit(personagemImg.image, personagemImg.rect)
+ 
+    	pygame.display.flip()              
+	        
 
-        x += mudanca_x
+
+
         menu()
-        tela.fill(branco)
         personagem(x,y)
         pygame.display.update()
         #FPS
