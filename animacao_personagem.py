@@ -1,3 +1,6 @@
+#Esse código foi copiado e adaptado do seguinte site: http://xorobabel.blogspot.com.br/2012/10/pythonpygame-2d-animation-jrpg-style.html
+
+
 import pygame
  
 class Serge(pygame.sprite.Sprite):
