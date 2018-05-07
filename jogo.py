@@ -17,8 +17,7 @@ branco = (255,255,255)
 tela = pygame.display.set_mode((comprimento_display,altura_display))
 pygame.display.set_caption('nome do jogo')
 relogio = pygame.time.Clock()
-#imagem do personagem
-personagemImg = animacao_personagem.Serge((150, 150))
+player = animacao_personagem.Serge((150, 150))
 
 def texto(texto, fonte):
     tipo_texto = fonte.render(texto, True, preto)
@@ -56,30 +55,26 @@ def menu():
         pygame.display.update()
         relogio.tick(15)
 
-def personagem (x,y):
-    tela.blit(personagemImg,(x,y))
 
 def gameloop():
-    x = (comprimento_display * 0.2)
-    y = (altura_display * 0.09)
-    mudanca_x = 0
 
-    fora_do_jogo = False
 
+    
     #enquanto o jogo esta aberto
+    fora_do_jogo = False
     while not fora_do_jogo:
 
-	for movimento in pygame.event.get():
-            if movimento.type == pygame.QUIT:
+	for event in pygame.event.get():
+            if event.type == pygame.QUIT:
             	    fora_do_jogo = True
-    	personagemImg.handle_event(movimento)
+    	player.handle_event(event)
     	tela.fill(pygame.Color('blue'))
-    	tela.blit(personagemImg.image, personagemImg.rect)
+    	tela.blit(player.image, player.rect)
     	pygame.display.flip()
 
         menu()
-        personagem(x,y)
-        pygame.display.update()
+        
+        pygame.display.flip()
         #FPS
         relogio.tick(60)
 
