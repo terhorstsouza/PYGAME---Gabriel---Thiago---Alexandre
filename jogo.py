@@ -29,8 +29,8 @@ def butao(mensagem, x, y, largura, altura, cor_inativa, cor_ativa, acao = None):
     click = pygame.mouse.get_pressed()
     if x + largura > mouse[0] > x and y + altura > mouse[1] > y:
         pygame.draw.rect(tela, cor_ativa,(x,y,largura,altura))
-        if click[0] == 1 and action != None:
-            action()
+        if click[0] == 1:
+            acao()
     else:
         pygame.draw.rect(tela,cor_inativa,(x,y,largura,altura))
     texto_botao = pygame.font.Font('freesansbold.ttf', 20)
@@ -68,19 +68,14 @@ def gameloop():
 
     #enquanto o jogo esta aberto
     while not fora_do_jogo:
-	
-	for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+
+	for movimento in pygame.event.get():
+            if movimento.type == pygame.QUIT:
             	    fora_do_jogo = True
- 
-    	personagemImg.handle_event(event)                 
-    	tela.fill(pygame.Color('blue'))  
+    	personagemImg.handle_event(movimento)
+    	tela.fill(pygame.Color('blue'))
     	tela.blit(personagemImg.image, personagemImg.rect)
- 
-    	pygame.display.flip()              
-	        
-
-
+    	pygame.display.flip()
 
         menu()
         personagem(x,y)
