@@ -65,12 +65,14 @@ def jogo():
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return -1
-            player.handle_event(evento)                 
+            player.handle_event(evento)
+        
+        player.update()
         tela.fill(pygame.Color('blue'))  
         tela.blit(player.image, player.rect)
         
         pygame.display.flip()              
-        relogio.tick(10)    
+        relogio.tick(15)      
 
 def gameloop():
     # Variavel estado: em que estado o jogo se encontra

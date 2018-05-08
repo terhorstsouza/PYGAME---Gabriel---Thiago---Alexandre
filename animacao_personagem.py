@@ -44,21 +44,32 @@ class Serge(pygame.sprite.Sprite):
  
         self.image = self.sheet.subsurface(self.sheet.get_clip())
  
-    def handle_event(self, event):
-        if event.type == pygame.QUIT:
-            fora_do_jogo = True
+    def update(self):
+        if self.direction == 'left':
+            self.clip(self.left_states)
+            self.rect.x -= 5
+        if self.direction == 'right':
+            self.clip(self.right_states)
+            self.rect.x += 5
  
+        if self.direction == 'stand_left':
+            self.clip(self.left_states[0])
+        if self.direction == 'stand_right':
+            self.clip(self.right_states[0])
+    
+        self.image = self.sheet.subsurface(self.sheet.get_clip())
+ 
+    def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
            
             if event.key == pygame.K_LEFT:
-                self.update('left')
+                self.direction = 'left'
             if event.key == pygame.K_RIGHT:
-                self.update('right')
-        
+                self.direction = 'right'
  
         if event.type == pygame.KEYUP:  
  
             if event.key == pygame.K_LEFT:
-                self.update('stand_left')            
+                self.direction = 'stand_left'           
             if event.key == pygame.K_RIGHT:
-                self.update('stand_right')
+                self.direction = 'stand_right'
