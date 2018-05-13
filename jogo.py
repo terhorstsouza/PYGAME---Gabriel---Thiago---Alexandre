@@ -5,21 +5,22 @@ import personagem
 pygame.init()
 
 
+comprimento_display = 736
+altura_display = 588
+
 texto_grande = pygame.font.Font('freesansbold.ttf', 115)
 texto_pequeno = pygame.font.Font('freesansbold.ttf', 30)
 
-tela = pygame.display.set_mode((640, 480))
+tela = pygame.display.set_mode((comprimento_display, altura_display))
 pygame.display.set_caption("Python/Pygame Animation")
 relogio = pygame.time.Clock()
 player = personagem.Neguinho((150, 150))
 
-comprimento_display = 800
-altura_display = 600
 
 preto = (0,0,0)
 branco = (255,255,255)
 
-
+tela_menu = pygame.image.load('jogo_terror.jpg')
 
 def texto(texto, fonte):
     tipo_texto = fonte.render(texto, True, preto)
@@ -48,7 +49,7 @@ def menu():
             if evento.type == pygame.QUIT:
                 return -1
         tela.fill(branco)
-        TextSurf, TextRect = texto('nome do jogo', texto_grande)
+        TextSurf, TextRect = texto('Land of Blood', texto_grande)
         TextRect.center = ((comprimento_display/2), (altura_display/2))
         tela.blit(TextSurf, TextRect)
 
