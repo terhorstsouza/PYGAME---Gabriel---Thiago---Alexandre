@@ -69,6 +69,10 @@ def jogo():
                 return -1
             player.handle_event(evento)
         
+	if player.rect.x <= 0 or player.rect.x >= 736 - 60:
+            player.rect.x = - player.rect.x
+
+	
         player.update()
 	tela.blit(background_mansao, [0,0])
         #tela.fill(pygame.Color('blue'))  
