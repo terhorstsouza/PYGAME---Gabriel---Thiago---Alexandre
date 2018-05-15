@@ -21,6 +21,7 @@ preto = (0,0,0)
 branco = (255,255,255)
 
 tela_menu = pygame.image.load('jogo_terror.jpg')
+background_mansao = pygame.image.load("mansao_BG_certo.jpg")
 
 def texto(texto, fonte):
     tipo_texto = fonte.render(texto, True, preto)
@@ -69,7 +70,8 @@ def jogo():
             player.handle_event(evento)
         
         player.update()
-        tela.fill(pygame.Color('blue'))  
+	tela.blit(background_mansao, [0,0])
+        #tela.fill(pygame.Color('blue'))  
         tela.blit(player.image, player.rect)
         
         pygame.display.flip()              
