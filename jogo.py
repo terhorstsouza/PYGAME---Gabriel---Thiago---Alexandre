@@ -16,6 +16,8 @@ pygame.display.set_caption("Python/Pygame Animation")
 relogio = pygame.time.Clock()
 player = personagem.Neguinho((150, 150))
 
+posicao_porta = 730
+largura_porta = 6
 
 preto = (0,0,0)
 branco = (255,255,255)
@@ -26,6 +28,9 @@ background_mansao = pygame.image.load("mansao_BG_certo.jpg")
 def texto(texto, fonte):
     tipo_texto = fonte.render(texto, True, preto)
     return tipo_texto, tipo_texto.get_rect()
+
+def teste():
+    print('funcionando')
 
 def butao(mensagem, x, y, largura, altura, cor_inativa, cor_ativa):
     mouse = pygame.mouse.get_pos()
@@ -62,6 +67,15 @@ def menu():
         pygame.display.update()
         relogio.tick(15)
 
+def interacao(x,l,acao):
+    for evento in pygame.event.get():
+        if player.rect.x >= x - 5 and\
+            player.rect.x <= x + l + 5:
+                if evento.type == pygame.KEYDOWN:
+                    if evento.key == pygame.K_UP:
+                        acao()
+
+
 def jogo():
     while True:
         for evento in pygame.event.get():
@@ -69,10 +83,14 @@ def jogo():
                 return -1
             player.handle_event(evento)
         
-	if player.rect.x <= 0 or player.rect.x >= 736 - 60:
-            player.rect.x = - player.rect.x
+	if player.rect.x <= 0:
+            player.rect.x = 0
+        if player.rect.x >= 736 - player.rect.width:
+            player.rect.x = 736 - player.rect.width
 
-	
+
+	porta = interacao(730,6,teste())	
+
         player.update()
 	tela.blit(background_mansao, [0,0])
         #tela.fill(pygame.Color('blue'))  
