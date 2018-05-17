@@ -1,2 +1,0 @@
-def Teste():
-    print('funcionando')
