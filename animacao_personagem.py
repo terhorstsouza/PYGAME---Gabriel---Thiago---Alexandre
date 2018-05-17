@@ -65,5 +65,5 @@ class Neguinho(pygame.sprite.Sprite):
                 self.direction = 'stand_right'
                 
            
-player = Neguinho((0, 475))
+
 
