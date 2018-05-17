@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import pygame
-import personagem
+import animacao_personagem
 
 
 pygame.init()
@@ -14,7 +14,7 @@ texto_pequeno = pygame.font.Font('freesansbold.ttf', 30)
 tela = pygame.display.set_mode((comprimento_display, altura_display))
 pygame.display.set_caption("Python/Pygame Animation")
 relogio = pygame.time.Clock()
-player = personagem.Neguinho((0, 475))
+player = animacao_personagem.Neguinho((0, 475))
 
 posicao_porta = 730
 largura_porta = 6
