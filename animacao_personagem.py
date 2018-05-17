@@ -1,7 +1,6 @@
 #Esse código foi copiado e adaptado do seguinte site: http://xorobabel.blogspot.com.br/2012/10/pythonpygame-2d-animation-jrpg-style.html
 
 import pygame
-import interação_objetos as io
  
 class Neguinho(pygame.sprite.Sprite):
     
@@ -37,9 +36,6 @@ class Neguinho(pygame.sprite.Sprite):
         if self.direction == 'right':
             self.clip(self.right_states)
             self.rect.x += 5
-        if self.direction == "cima":
-            self.clip(self.right_states)
-            io.Teste
             
         if self.direction == 'stand_left':
             self.clip(self.left_states[0])
@@ -58,8 +54,8 @@ class Neguinho(pygame.sprite.Sprite):
                 self.direction = 'right'
             
             if event.key == pygame.K_UP:
-                if player.rect.x >= 728 and player.rect.x < 736:
-                    self.direction = "cima"
+                if self.rect.x >= 728-(52*2):
+                    print("Funcionando")
                     
         if event.type == pygame.KEYUP:  
  
