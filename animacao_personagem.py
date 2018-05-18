@@ -1,9 +1,25 @@
-#Esse código foi copiado e adaptado do seguinte site: http://xorobabel.blogspot.com.br/2012/10/pythonpygame-2d-animation-jrpg-style.html
+#!/usr/bin/env python
 
 import pygame
- 
+
+VELOCIDADE = 20
+
+class Tiro():
+    def __init__ (self, x, y, raio, velocidade, direcao):
+        self.x = x
+        self.y = y
+        self.r = raio
+        self.direcao = direcao
+        self.vel = velocidade
+        self.vel = self.vel * direcao
+        self.tela = tela
+
+    def draw(self):
+        pygame.draw.circle(self.tela, (0,0,0), (self.x, self.y), self.r)
+
+
 class Neguinho(pygame.sprite.Sprite):
-    
+
     def __init__(self, position):
         self.sheet = pygame.image.load('personagem.png')
         self.sheet.set_clip(pygame.Rect(0, 0, 52, 76))
@@ -14,21 +30,21 @@ class Neguinho(pygame.sprite.Sprite):
         self.left_states = { 0: (0, 76, 52, 76), 1: (52, 76, 52, 76), 2: (156, 76, 52, 76) }
         self.right_states = { 0: (0, 152, 52, 76), 1: (52, 152, 52, 76), 2: (156, 152, 52, 76) }
         self.direction = 'stand_left'
-    
-    
+
+
     def get_frame(self, frame_set):
         self.frame += 1
         if self.frame > (len(frame_set) - 1):
             self.frame = 0
         return frame_set[self.frame]
- 
+
     def clip(self, clipped_rect):
         if type(clipped_rect) is dict:
             self.sheet.set_clip(pygame.Rect(self.get_frame(clipped_rect)))
         else:
             self.sheet.set_clip(pygame.Rect(clipped_rect))
         return clipped_rect
-       
+
     def update(self):
         if self.direction == 'left':
             self.clip(self.left_states)
@@ -36,34 +52,36 @@ class Neguinho(pygame.sprite.Sprite):
         if self.direction == 'right':
             self.clip(self.right_states)
             self.rect.x += 5
-            
+
         if self.direction == 'stand_left':
             self.clip(self.left_states[0])
         if self.direction == 'stand_right':
             self.clip(self.right_states[0])
-    
+
         self.image = self.sheet.subsurface(self.sheet.get_clip())
 
-
-
     def handle_event(self, event):
-        if event.type == pygame.KEYDOWN:           
+        balas = []
+        direcao = 0
+        if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 self.direction = 'left'
+                direcao = -1
             if event.key == pygame.K_RIGHT:
                 self.direction = 'right'
-            
+                direcao = 1
+            if event.key == pygame.K_SPACE:
+                balas.append(Tiro(self.rect.x, self.rect.y, 4, VELOCIDADE, direcao))
+                for bala in balas:
+                    bala.draw()
+
             if event.key == pygame.K_UP:
                 if self.rect.x >= 728-(52*2):
                     print("Funcionando")
-                    
-        if event.type == pygame.KEYUP:  
- 
+
+        if event.type == pygame.KEYUP:
+
             if event.key == pygame.K_LEFT:
-                self.direction = 'stand_left'           
+                self.direction = 'stand_left'
             if event.key == pygame.K_RIGHT:
                 self.direction = 'stand_right'
-                
-           
-
-
