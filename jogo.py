@@ -16,6 +16,10 @@ pygame.display.set_caption("Python/Pygame Animation")
 relogio = pygame.time.Clock()
 player = animacao_personagem.Neguinho((0, 475))
 
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
+mobs = pygame.sprite.Group()
+
 posicao_porta = 730
 largura_porta = 6
 
@@ -69,6 +73,11 @@ def menu():
 
 
 def jogo():
+
+    for i in range(8):
+        m = MOB.MOBs(100,490,52,52,690)
+        mobs.add(m)
+
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -76,6 +85,7 @@ def jogo():
             player.handle_event(evento)
         
         player.update()
+	mobs.update()
         
         if player.rect.x <= 0:
             player.rect.x = 0
@@ -83,7 +93,9 @@ def jogo():
             player.rect.x = 736 - player.rect.width
 
         tela.blit(background_mansao, [0,0])
-        #tela.fill(pygame.Color('blue'))  
+        #tela.fill(pygame.Color('blue'))
+	for bixo in mobs:
+            bixo.draw(tela)  
         tela.blit(player.image, player.rect)
         
         pygame.display.flip()              
