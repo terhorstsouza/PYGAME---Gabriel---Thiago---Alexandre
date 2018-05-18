@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import pygame
 import animacao_personagem
+import MOB
 
 
 pygame.init()
