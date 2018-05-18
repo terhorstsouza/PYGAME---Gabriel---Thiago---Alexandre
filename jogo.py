@@ -72,12 +72,17 @@ def menu():
         pygame.display.update()
         relogio.tick(15)
 
+lista_X = []
 
 def jogo():
 
+    for w in range(8):    
+        x = random.randrange(100,600)
+        lista_x.append(x)
     for i in range(8):
-        m = MOB.MOBs(100,490,52,52,690)
-        mobs.add(m)
+        for o in lista_x:
+            m = MOB.MOBs(o,490,52,52,690)
+            mobs.add(m)
 
     while True:
         for evento in pygame.event.get():
