@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 import pygame
+<<<<<<< HEAD
 import random
+=======
+import animacao_personagem
+import MOB
+
+>>>>>>> fecaeb2446647c5505749d886cd001ea3e013369
 
 pygame.init()
 
@@ -19,6 +25,10 @@ texto_pequeno = pygame.font.Font('freesansbold.ttf', 30)
 tela = pygame.display.set_mode((comprimento_display, altura_display))
 pygame.display.set_caption("Python/Pygame Animation")
 relogio = pygame.time.Clock()
+
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
+mobs = pygame.sprite.Group()
 
 posicao_porta = 730
 largura_porta = 6
@@ -227,6 +237,7 @@ def menu():
         pygame.display.update()
         relogio.tick(15)
 
+<<<<<<< HEAD
 lista_x = []
 
 group_tiros = pygame.sprite.Group()
@@ -236,11 +247,22 @@ group_tiros = pygame.sprite.Group()
 def jogo():
 
     for w in range(8):
+=======
+lista_X = []
+
+def jogo():
+
+    for w in range(8):    
+>>>>>>> fecaeb2446647c5505749d886cd001ea3e013369
         x = random.randrange(100,600)
         lista_x.append(x)
     for i in range(8):
         for o in lista_x:
+<<<<<<< HEAD
             m = MOBs(o,490,52,52,690)
+=======
+            m = MOB.MOBs(o,490,52,52,690)
+>>>>>>> fecaeb2446647c5505749d886cd001ea3e013369
             mobs.add(m)
 
     while True:
@@ -268,15 +290,26 @@ def jogo():
 
 
         player.update()
+<<<<<<< HEAD
         mobs.update()
         group_tiros.update()
 
+=======
+	mobs.update()
+        
+>>>>>>> fecaeb2446647c5505749d886cd001ea3e013369
         if player.rect.x <= 0:
             player.rect.x = 0
         if player.rect.x >= 736 - player.rect.width:
             player.rect.x = 736 - player.rect.width
 
         tela.blit(background_mansao, [0,0])
+<<<<<<< HEAD
+=======
+        #tela.fill(pygame.Color('blue'))
+	for bixo in mobs:
+            bixo.draw(tela)  
+>>>>>>> fecaeb2446647c5505749d886cd001ea3e013369
         tela.blit(player.image, player.rect)
         group_tiros.draw(tela)
 
