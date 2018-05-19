@@ -231,8 +231,7 @@ lista_x = []
 
 group_tiros = pygame.sprite.Group()
 
-def tira_vida(dano, vida, sprite):
-    sprite.
+#def tira_vida(dano, vida, sprite):
 
 def jogo():
 
@@ -264,7 +263,7 @@ def jogo():
 
         for mob in mobs:
             balas_atingidos = pygame.sprite.spritecollide(mob, group_tiros, True)
-            for balas in balas_atingidos:
+        #    for balas in balas_atingidos:
 
 
 
