@@ -130,7 +130,7 @@ class Neguinho(pygame.sprite.Sprite):
             if event.key == pygame.K_d:
                 self.directionx = 'right'
 	    
-	    if event.key == pygame.K_a:
+	    if event.key == pygame.K_w:
                 if self.rect.y == 475:
                     self.vy = -15
                     self.directiony = 'jump'
@@ -147,7 +147,7 @@ class Neguinho(pygame.sprite.Sprite):
             if event.key == pygame.K_d:
                 self.directionx = 'stand_right'
 
-	    if event.key == pygame.K_a:
+	    if event.key == pygame.K_w:
                 if self.rect.y <= 475:
                     self.directiony = 'baixo'
 
