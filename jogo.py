@@ -300,6 +300,8 @@ def jogo():
             player.rect.x = 0
         if player.rect.x >= 736 - player.rect.width:
             player.rect.x = 736 - player.rect.width
+	if player.rect.y >= 475:
+            player.rect.y =  475
 
         tela.blit(background_mansao, [0,0])
         tela.blit(player.image, player.rect)
