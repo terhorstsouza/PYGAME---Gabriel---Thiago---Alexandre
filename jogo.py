@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import pygame
 import random
 
@@ -26,12 +27,16 @@ largura_porta = 6
 preto = (0,0,0)
 branco = (255,255,255)
 
+vida1 = 30
+dano1 = 10
+
 tela_menu = pygame.image.load('jogo_terror.jpg')
 background_mansao = pygame.image.load("mansao_BG_certo.jpg")
 
 class Tiro(pygame.sprite.Sprite):
     def __init__ (self, x, y, raio, velocidade, direcao):
         pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('Glenos-G_160_bullet.png')
         self.image = pygame.Surface((2*raio, 2*raio))
         pygame.draw.circle(self.image, preto, (0, 0), raio)
         self.rect = self.image.get_rect()
@@ -137,28 +142,29 @@ class MOBs(pygame.sprite.Sprite):
             self.vel = 3
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
             self.health = 10
-            self.visible = True
             self.rect = self.walkRight[self.walkCount].get_rect()
             self.rect.x = self.x
             self.rect.y = self.y
+            self.helth = vida1
 
-        def draw(self,win):
+        def draw(self):
             self.move()
-            if self.visible:
-                if self.walkCount + 1 >= 33:
-                    self.walkCount = 0
+            if self.walkCount + 1 >= 33:
+                self.walkCount = 0
 
-                if self.vel > 0:
-                    win.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
-                    self.walkCount += 1
-                else:
-                    win.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
-                    self.walkCount += 1
+            if self.vel > 0:
+                tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
+                self.walkCount += 1
 
-                pygame.draw.rect(win, (255,0,0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))
-                pygame.draw.rect(win, (0,128,0), (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))
-                self.hitbox = (self.x + 17, self.y + 2, 31, 57)
-                #pygame.draw.rect(win, (255,0,0), self.hitbox,2)
+            else:
+                tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
+                self.walkCount += 1
+
+            self.hitbox = (self.x + 17, self.y + 2, 31, 57)
+
+            pygame.draw.rect(tela, (0,128,0), (self.hitbox[0],\
+                                self.hitbox[1] - 20, 50, 10))
+
 
         def move(self):
             if self.vel > 0:
@@ -176,13 +182,17 @@ class MOBs(pygame.sprite.Sprite):
             self.rect.x = self.x
             self.rect.y = self.y
 
-        def hit(self):
+        def hit(self, dano, bala, acertos):
             if self.health > 0:
-                self.health -= 1
+                self.health -= dano
+                for bala in group_tiros:
+                    pygame.draw.rect(tela, (255,0,0), (self.hitbox[0],\
+                    self.hitbox[1] - 20, 50 - (3 * (10 - len(acertos))), 10))
             else:
-                self.visible = False
-            pass
-            print('hit')
+                pygame.sprite.spritecollide(bala, mobs, True)
+                print('morreu')
+
+
 
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
@@ -231,9 +241,6 @@ lista_x = []
 
 group_tiros = pygame.sprite.Group()
 
-def tira_vida(dano, vida, sprite):
-    sprite.
-
 def jogo():
 
     for w in range(8):
@@ -255,18 +262,18 @@ def jogo():
                 if pygame.key.get_pressed()[pygame.K_LEFT]:
                     direcao = -1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
-                    pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
-                    group_tiros.add(
-                        Tiro((player.rect.x + (player.rect.width /2)),\
-                             (player.rect.y + 45), 7, VELOCIDADE, direcao))
+                    if len(group_tiros) <= 5:
+                        pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
+                        group_tiros.add(
+                            Tiro((player.rect.x + (player.rect.width /2)),\
+                                 (player.rect.y + 45), 7, VELOCIDADE, direcao))
 
             player.handle_event(evento)
 
         for mob in mobs:
-            balas_atingidos = pygame.sprite.spritecollide(mob, group_tiros, True)
-            for balas in balas_atingidos:
-
-
+            balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
+            for bala in balas_atingidas:
+                mob.hit(dano1, bala, balas_atingidas)
 
         player.update()
         mobs.update()
@@ -282,7 +289,7 @@ def jogo():
         group_tiros.draw(tela)
 
         for bixo in mobs:
-            bixo.draw(tela)
+            bixo.draw()
 
         pygame.display.flip()
         pygame.display.update()
@@ -294,7 +301,7 @@ def gameloop():
     # -1: game over
     # 0: tela inicial
     # 1: proxima tela
-    estado = 0
+    estado = 1
     #enquanto o jogo esta aberto
     while estado != -1:
         if estado == 0:
