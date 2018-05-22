@@ -9,6 +9,7 @@ comprimento_display = 736
 altura_display = 588
 VELOCIDADE = 8
 music = pygame.mixer.music.load("13_Digital_Native.wav")
+
 pygame.mixer.music.play(-1)
 
 dano1 = 10
@@ -21,14 +22,11 @@ tela = pygame.display.set_mode((comprimento_display, altura_display))
 pygame.display.set_caption("Python/Pygame Animation")
 relogio = pygame.time.Clock()
 
-posicao_porta = 730
 largura_porta = 6
+posicao_porta = 730
 
 preto = (0,0,0)
 branco = (255,255,255)
-
-vida1 = 30
-dano1 = 10
 
 tela_menu = pygame.image.load('jogo_terror.jpg')
 background_mansao = pygame.image.load("mansao_BG_certo.jpg")
@@ -36,7 +34,6 @@ background_mansao = pygame.image.load("mansao_BG_certo.jpg")
 class Tiro(pygame.sprite.Sprite):
     def __init__ (self, x, y, raio, velocidade, direcao):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('Glenos-G_160_bullet.png')
         self.image = pygame.Surface((2*raio, 2*raio))
         pygame.draw.circle(self.image, preto, (0, 0), raio)
         self.rect = self.image.get_rect()
@@ -46,6 +43,8 @@ class Tiro(pygame.sprite.Sprite):
         self.vel = velocidade * direcao
     def update(self):
         self.rect.x += self.vel
+        if self.rect.x < 0 or self.rect.x > comprimento_display:
+            self.kill()
 
 class Neguinho(pygame.sprite.Sprite):
 
@@ -97,20 +96,20 @@ class Neguinho(pygame.sprite.Sprite):
     def handle_event(self, event):
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_a:
                 self.direction = 'left'
 
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_d:
                 self.direction = 'right'
 
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_e:
                 if self.rect.x >= 728-(52*2):
                     print("Funcionando")
 
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_a:
                 self.direction = 'stand_left'
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_d:
                 self.direction = 'stand_right'
 
 player = Neguinho((0, 475))
@@ -130,7 +129,7 @@ class MOBs(pygame.sprite.Sprite):
                     pygame.image.load('L9E.png'), pygame.image.load('L10E.png'),\
                     pygame.image.load('L11E.png')]
 
-        def __init__(self, x, y, width, height, end):
+        def __init__(self, x, y, width, height, end, vida, dano):
             pygame.sprite.Sprite.__init__(self)
             self.x = x
             self.y = y
@@ -145,7 +144,8 @@ class MOBs(pygame.sprite.Sprite):
             self.rect = self.walkRight[self.walkCount].get_rect()
             self.rect.x = self.x
             self.rect.y = self.y
-            self.helth = vida1
+            self.health = vida
+            self.dano = dano
 
         def draw(self):
             self.move()
@@ -160,10 +160,8 @@ class MOBs(pygame.sprite.Sprite):
                 tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
 
-            self.hitbox = (self.x + 17, self.y + 2, 31, 57)
-
-            pygame.draw.rect(tela, (0,128,0), (self.hitbox[0],\
-                                self.hitbox[1] - 20, 50, 10))
+            pygame.draw.rect(tela, (0,128,0), (self.x + 17,\
+                                 self.y + 2 - 20, 50, 10))
 
 
         def move(self):
@@ -182,24 +180,23 @@ class MOBs(pygame.sprite.Sprite):
             self.rect.x = self.x
             self.rect.y = self.y
 
-        def hit(self, dano, bala, acertos):
+        def hit(self, bala, acertos):
             if self.health > 0:
-                self.health -= dano
-                for bala in group_tiros:
-                    pygame.draw.rect(tela, (255,0,0), (self.hitbox[0],\
-                    self.hitbox[1] - 20, 50 - (3 * (10 - len(acertos))), 10))
+                self.health -= self.dano
+                for bala in acertos:
+                    pygame.draw.rect(tela, (255,0,0), (self.x + 17,\
+                                self.y + 2, 50 - (3 * (10 - len(acertos))), 10))
+                    print('hello there')
             else:
                 pygame.sprite.spritecollide(bala, mobs, True)
                 print('morreu')
-
-
 
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 mobs = pygame.sprite.Group()
 
-def texto(texto, fonte):
-    tipo_texto = fonte.render(texto, True, preto)
+def texto(texto, fonte, cor):
+    tipo_texto = fonte.render(texto, True, cor)
     return tipo_texto, tipo_texto.get_rect()
 
 def butao(mensagem, x, y, largura, altura, cor_inativa, cor_ativa):
@@ -214,10 +211,27 @@ def butao(mensagem, x, y, largura, altura, cor_inativa, cor_ativa):
         pygame.draw.rect(tela,cor_inativa,(x,y,largura,altura))
 
     texto_botao = pygame.font.Font('freesansbold.ttf', 20)
-    textSurf, textRect = texto(mensagem, texto_botao)
+    textSurf, textRect = texto(mensagem, texto_botao, preto)
     textRect.center = ((x+(largura/2)), (y+(altura/2)))
     tela.blit(textSurf, textRect)
     return False
+
+def tela_morte():
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return -1
+        tela.fill(preto)
+        TextSurf, TextRect = texto('faleceu', texto_grande, branco)
+        TextRect.center = ((comprimento_display/2), (altura_display/2))
+        tela.blit(TextSurf, TextRect)
+
+        if butao('jogar', 150,450,100,50,(0,255,0),(0,200,0)):
+            return 1
+        if butao('sair', 550,450,100,50,(255,0,0),(200,0,0)):
+            return -1
+        pygame.display.update()
 
 def menu():
     while True:
@@ -225,7 +239,7 @@ def menu():
             if evento.type == pygame.QUIT:
                 return -1
         tela.fill(branco)
-        TextSurf, TextRect = texto('Land of Blood', texto_grande)
+        TextSurf, TextRect = texto('Land of Blood', texto_grande, preto)
         TextRect.center = ((comprimento_display/2), (altura_display/2))
         tela.blit(TextSurf, TextRect)
 
@@ -248,7 +262,7 @@ def jogo():
         lista_x.append(x)
     for i in range(8):
         for o in lista_x:
-            m = MOBs(o,490,52,52,690)
+            m = MOBs(o,490,52,52,690, vida1, dano1)
             mobs.add(m)
 
     while True:
@@ -257,9 +271,9 @@ def jogo():
                 return -1
             if evento.type == pygame.KEYDOWN:
 
-                if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                if evento.key == pygame.K_d:
                     direcao = 1
-                if pygame.key.get_pressed()[pygame.K_LEFT]:
+                if evento.key == pygame.K_a:
                     direcao = -1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
                     if len(group_tiros) <= 5:
@@ -271,9 +285,12 @@ def jogo():
             player.handle_event(evento)
 
         for mob in mobs:
+            if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
+                print('tu morreras')
+                return -2
             balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
             for bala in balas_atingidas:
-                mob.hit(dano1, bala, balas_atingidas)
+                mob.hit(bala, balas_atingidas)
 
         player.update()
         mobs.update()
@@ -297,14 +314,16 @@ def jogo():
 
 def gameloop():
     # Variavel estado: em que estado o jogo se encontra
-    #
+    # -2: tela de morte
     # -1: game over
     # 0: tela inicial
     # 1: proxima tela
-    estado = 1
+    estado = 0
     #enquanto o jogo esta aberto
     while estado != -1:
-        if estado == 0:
+        if estado == -2:
+            estado = tela_morte()
+        elif estado == 0:
             estado = menu()
         elif estado == 1:
             estado = jogo()
