@@ -15,8 +15,8 @@ pygame.mixer.music.play(-1)
 dano1 = 10
 vida1 = 30
 
-texto_grande = pygame.font.Font('freesansbold.ttf', 115)
-texto_pequeno = pygame.font.Font('freesansbold.ttf', 30)
+texto_grande = pygame.font.Font('Kingthings_Calligraphica_2.ttf', 115)
+texto_pequeno = pygame.font.Font('Kingthings_Calligraphica_2.ttf', 30)
 
 tela = pygame.display.set_mode((comprimento_display, altura_display))
 pygame.display.set_caption("Python/Pygame Animation")
@@ -28,7 +28,7 @@ posicao_porta = 730
 preto = (0,0,0)
 branco = (255,255,255)
 
-tela_menu = pygame.image.load('jogo_terror.jpg')
+tela_menu = pygame.image.load('menu_BG_2.jpg')
 background_mansao = pygame.image.load("mansao_BG_certo.jpg")
 
 class Tiro(pygame.sprite.Sprite):
@@ -60,7 +60,7 @@ class Neguinho(pygame.sprite.Sprite):
         self.x = self.rect.x
         self.y = self.rect.y
         self.frame = 0
-	self.vy = 0
+        self.vy = 0
         self.ay = 1
         self.pulo = 15
         self.left_states = { 0: (0, 76, 52, 76), 1: (52, 76, 52, 76),\
@@ -68,7 +68,7 @@ class Neguinho(pygame.sprite.Sprite):
         self.right_states = { 0: (0, 152, 52, 76), 1: (52, 152, 52, 76),\
                             2: (156, 152, 52, 76) }
         self.directionx = 'stand_left'
-	self.directiony = 'stand_right'
+        self.directiony = 'stand_right'
 
     def get_frame(self, frame_set):
         self.frame += 1
@@ -88,16 +88,16 @@ class Neguinho(pygame.sprite.Sprite):
             self.clip(self.left_states)
             self.rect.x -= 5
 
-	if self.directiony == 'jump':
+        if self.directiony == 'jump':
             self.vy += self.ay
             self.rect.y += self.vy
 	
-	if self.directiony == 'baixo':
+        if self.directiony == 'baixo':
             if self.rect.y <475:
                 gravidade = 50
                 self.rect.y += gravidade
 	
-	if self.directiony == 'jump' and self.directionx == 'right':
+        if self.directiony == 'jump' and self.directionx == 'right':
             self.vy += self.ay
             self.rect.y += self.vy
             self.clip(self.right_states)
@@ -130,7 +130,7 @@ class Neguinho(pygame.sprite.Sprite):
             if event.key == pygame.K_d:
                 self.directionx = 'right'
 	    
-	    if event.key == pygame.K_w:
+            if event.key == pygame.K_w:
                 if self.rect.y == 475:
                     self.vy = -15
                     self.directiony = 'jump'
@@ -147,7 +147,7 @@ class Neguinho(pygame.sprite.Sprite):
             if event.key == pygame.K_d:
                 self.directionx = 'stand_right'
 
-	    if event.key == pygame.K_w:
+            if event.key == pygame.K_w:
                 if self.rect.y <= 475:
                     self.directiony = 'baixo'
 
@@ -247,44 +247,42 @@ def butao(mensagem, x, y, largura, altura, cor_inativa, cor_ativa):
         if click[0] == 1:
             return True
     else:
-        pygame.draw.rect(tela,cor_inativa,(x,y,largura,altura))
+        pass
 
-    texto_botao = pygame.font.Font('freesansbold.ttf', 20)
-    textSurf, textRect = texto(mensagem, texto_botao, preto)
+    texto_botao = pygame.font.Font('Kingthings_Calligraphica_2.ttf', 35)
+    textSurf, textRect = texto(mensagem, texto_botao, cor_inativa)
     textRect.center = ((x+(largura/2)), (y+(altura/2)))
     tela.blit(textSurf, textRect)
     return False
 
 def tela_morte():
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return -1
-        tela.fill(preto)
-        TextSurf, TextRect = texto('faleceu', texto_grande, branco)
-        TextRect.center = ((comprimento_display/2), (altura_display/2))
-        tela.blit(TextSurf, TextRect)
-
-        if butao('jogar', 150,450,100,50,(0,255,0),(0,200,0)):
-            return 1
-        if butao('sair', 550,450,100,50,(255,0,0),(200,0,0)):
-            return -1
-        pygame.display.update()
+            tela.fill(preto)
+            TextSurf, TextRect = texto('FALECEU BABACA', texto_grande, branco)
+            TextRect.center = ((comprimento_display/2), (altura_display/2))
+            tela.blit(TextSurf, TextRect)
+            if butao('jogar', 318,425,75,25,(0,255,0),(128,128,128)):
+                return 1
+            if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):\
+                return -1
+            pygame.display.update()
 
 def menu():
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return -1
-        tela.fill(branco)
+        tela.blit(tela_menu, [0,0])
         TextSurf, TextRect = texto('Land of Blood', texto_grande, preto)
         TextRect.center = ((comprimento_display/2), (altura_display/2))
         tela.blit(TextSurf, TextRect)
 
-        if butao('jogar', 150,450,100,50,(0,255,0),(0,200,0)):
+        if butao('jogar', 318,425,75,25,(0,255,0),(128,128,128)):
             return 1
-        if butao('sair', 550,450,100,50,(255,0,0),(200,0,0)):
+        if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
             return -1
 
         pygame.display.update()
@@ -339,7 +337,7 @@ def jogo():
             player.rect.x = 0
         if player.rect.x >= 736 - player.rect.width:
             player.rect.x = 736 - player.rect.width
-	if player.rect.y >= 475:
+        if player.rect.y >= 475:
             player.rect.y =  475
 
         tela.blit(background_mansao, [0,0])
