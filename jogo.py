@@ -60,11 +60,15 @@ class Neguinho(pygame.sprite.Sprite):
         self.x = self.rect.x
         self.y = self.rect.y
         self.frame = 0
+	self.vy = 0
+        self.ay = 1
+        self.pulo = 15
         self.left_states = { 0: (0, 76, 52, 76), 1: (52, 76, 52, 76),\
                             2: (156, 76, 52, 76) }
         self.right_states = { 0: (0, 152, 52, 76), 1: (52, 152, 52, 76),\
                             2: (156, 152, 52, 76) }
-        self.direction = 'stand_left'
+        self.directionx = 'stand_left'
+	self.directiony = 'stand_right'
 
     def get_frame(self, frame_set):
         self.frame += 1
@@ -83,11 +87,35 @@ class Neguinho(pygame.sprite.Sprite):
         if self.direction == 'left':
             self.clip(self.left_states)
             self.rect.x -= 5
+
+	if self.directiony == 'jump':
+            self.vy += self.ay
+            self.rect.y += self.vy
+	
+	if self.directiony == 'baixo':
+            if self.rect.y <475:
+                gravidade = 50
+                self.rect.y += gravidade
+	
+	if self.directiony == 'jump' and self.directionx == 'right':
+            self.vy += self.ay
+            self.rect.y += self.vy
+            self.clip(self.right_states)
+            self.rect.x += 5
+            
+        if self.directiony == 'jump' and self.directionx == 'left':
+            self.vy += self.ay
+            self.rect.y += self.vy
+            self.clip(self.left_states)
+            self.rect.x -= 5
+
         if self.direction == 'right':
             self.clip(self.right_states)
             self.rect.x += 5
+
         if self.direction == 'stand_left':
             self.clip(self.left_states[0])
+
         if self.direction == 'stand_right':
             self.clip(self.right_states[0])
 
@@ -101,16 +129,27 @@ class Neguinho(pygame.sprite.Sprite):
 
             if event.key == pygame.K_d:
                 self.direction = 'right'
+	    
+	    if event.key == pygame.K_a:
+                if self.rect.y == 475:
+                    self.vy = -15
+                    self.directiony = 'jump'
 
             if event.key == pygame.K_e:
                 if self.rect.x >= 728-(52*2):
                     print("Funcionando")
 
         if event.type == pygame.KEYUP:
+
             if event.key == pygame.K_a:
                 self.direction = 'stand_left'
+
             if event.key == pygame.K_d:
                 self.direction = 'stand_right'
+
+	    if event.key == pygame.K_a:
+                if self.rect.y <= 475:
+                    self.directiony = 'baixo'
 
 player = Neguinho((0, 475))
 
