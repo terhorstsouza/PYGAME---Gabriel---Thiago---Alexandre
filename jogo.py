@@ -84,7 +84,7 @@ class Neguinho(pygame.sprite.Sprite):
         return clipped_rect
 
     def update(self):
-        if self.direction == 'left':
+        if self.directionx == 'left':
             self.clip(self.left_states)
             self.rect.x -= 5
 
@@ -109,14 +109,14 @@ class Neguinho(pygame.sprite.Sprite):
             self.clip(self.left_states)
             self.rect.x -= 5
 
-        if self.direction == 'right':
+        if self.directionx == 'right':
             self.clip(self.right_states)
             self.rect.x += 5
 
-        if self.direction == 'stand_left':
+        if self.directionx == 'stand_left':
             self.clip(self.left_states[0])
 
-        if self.direction == 'stand_right':
+        if self.directionx == 'stand_right':
             self.clip(self.right_states[0])
 
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -125,10 +125,10 @@ class Neguinho(pygame.sprite.Sprite):
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                self.direction = 'left'
+                self.directionx = 'left'
 
             if event.key == pygame.K_d:
-                self.direction = 'right'
+                self.directionx = 'right'
 	    
 	    if event.key == pygame.K_a:
                 if self.rect.y == 475:
@@ -142,10 +142,10 @@ class Neguinho(pygame.sprite.Sprite):
         if event.type == pygame.KEYUP:
 
             if event.key == pygame.K_a:
-                self.direction = 'stand_left'
+                self.directionx = 'stand_left'
 
             if event.key == pygame.K_d:
-                self.direction = 'stand_right'
+                self.directionx = 'stand_right'
 
 	    if event.key == pygame.K_a:
                 if self.rect.y <= 475:
