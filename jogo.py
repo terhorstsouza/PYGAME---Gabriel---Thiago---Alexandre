@@ -195,17 +195,22 @@ class MOBs(pygame.sprite.Sprite):
                 self.walkCount = 0
 
             if self.vel > 0:
-                tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
+                tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
 
             else:
-                tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
+                tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
+
 
         def move(self):
             if self.vel > 0:
                 if self.x + self.vel < self.path[1]:
-                    self.x += self.vel
+                    if self.x > player.x:
+                        self.x -= self.vel
+                    else:
+                        self.x += self.vel
+
                 else:
                     self.vel = self.vel * -1
                     self.walkCount = 0
