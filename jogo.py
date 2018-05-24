@@ -7,13 +7,13 @@ pygame.init()
 
 comprimento_display = 736
 altura_display = 588
-VELOCIDADE = 8
+VELOCIDADE = 10
 music = pygame.mixer.music.load("13_Digital_Native.wav")
 
-pygame.mixer.music.play(-1)
+#pygame.mixer.music.play(-1)
 
 dano1 = 10
-vida1 = 30
+vida1 = 50
 
 texto_grande = pygame.font.Font('Kingthings_Calligraphica_2.ttf', 115)
 texto_pequeno = pygame.font.Font('Kingthings_Calligraphica_2.ttf', 30)
@@ -199,10 +199,6 @@ class MOBs(pygame.sprite.Sprite):
                 tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
 
-            pygame.draw.rect(tela, (0,128,0), (self.x + 17,\
-                                 self.y + 2 - 20, 50, 10))
-
-
         def move(self):
             if self.vel > 0:
                 if self.x + self.vel < self.path[1]:
@@ -223,8 +219,6 @@ class MOBs(pygame.sprite.Sprite):
             if self.health > 0:
                 self.health -= self.dano
                 for bala in acertos:
-                    pygame.draw.rect(tela, (255,0,0), (self.x + 17,\
-                                self.y + 2, 50 - (3 * (10 - len(acertos))), 10))
                     print('hello there')
             else:
                 pygame.sprite.spritecollide(bala, mobs, True)
@@ -255,18 +249,48 @@ def butao(mensagem, x, y, largura, altura, cor_inativa, cor_ativa):
     tela.blit(textSurf, textRect)
     return False
 
+def pause():
+
+    paused = True
+
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    paused = False
+
+                elif event.key == pygame.K_q:
+                    pygame.quit()
+                    quit()
+
+        TextSurf, TextRect = texto('Pausado', texto_grande, preto)
+        TextRect.center = ((comprimento_display/2), (altura_display/2))
+        tela.blit(TextSurf, TextRect)
+
+        TextSurf, TextRect = texto('Pressione C para continuar ou Q para sair', texto_pequeno, preto)
+        TextRect.center = ((comprimento_display/3), (altura_display/3))
+        tela.blit(TextSurf, TextRect)
+
+        pygame.display.update()
+    relogio.tick(5)
+    pause = True
+       
 def tela_morte():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return -1
             tela.fill(preto)
-            TextSurf, TextRect = texto('FALECEU BABACA', texto_grande, branco)
+            TextSurf, TextRect = texto('faleceu', texto_grande, branco)
             TextRect.center = ((comprimento_display/2), (altura_display/2))
             tela.blit(TextSurf, TextRect)
-            if butao('jogar', 318,425,75,25,(0,255,0),(128,128,128)):
+            if butao('jogar', 318,425,75,25,(0,255,0),(128,128,128)):                
                 return 1
-            if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):\
+            if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
                 return -1
             pygame.display.update()
 
@@ -307,6 +331,8 @@ def jogo():
             if evento.type == pygame.QUIT:
                 return -1
             if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_p:
+                    pause()
 
                 if evento.key == pygame.K_d:
                     direcao = 1
@@ -314,7 +340,7 @@ def jogo():
                     direcao = -1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
                     if len(group_tiros) <= 5:
-                        pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
+                        #pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
                         group_tiros.add(
                             Tiro((player.rect.x + (player.rect.width /2)),\
                                  (player.rect.y + 45), 7, VELOCIDADE, direcao))
@@ -323,7 +349,7 @@ def jogo():
 
         for mob in mobs:
             if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
-                print('tu morreras')
+                print('faleceu')
                 return -2
             balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
             for bala in balas_atingidas:
