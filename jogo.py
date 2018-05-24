@@ -3,6 +3,8 @@
 import pygame
 import random
 
+#pinto
+
 pygame.init()
 
 comprimento_display = 736
