@@ -3,16 +3,17 @@
 import pygame
 import random
 
-#pinto
 
 pygame.init()
+
+morte = []
 
 comprimento_display = 736
 altura_display = 588
 VELOCIDADE = 10
 music = pygame.mixer.music.load("13_Digital_Native.wav")
 
-#pygame.mixer.music.play(-1)
+pygame.mixer.music.play(-1)
 
 dano1 = 10
 vida1 = 50
@@ -31,7 +32,7 @@ preto = (0,0,0)
 branco = (255,255,255)
 
 tela_menu = pygame.image.load('menu_BG_2.jpg')
-background_mansao = pygame.image.load("mansao_BG_certo.jpg")
+background = pygame.image.load("mansao_BG_certo.jpg")
 
 class Tiro(pygame.sprite.Sprite):
     def __init__ (self, x, y, raio, velocidade, direcao):
@@ -224,6 +225,8 @@ class MOBs(pygame.sprite.Sprite):
                     print('hello there')
             else:
                 pygame.sprite.spritecollide(bala, mobs, True)
+                morte.append(1)
+                print(len(morte))
                 print('morreu')
 
 all_sprites = pygame.sprite.Group()
@@ -327,6 +330,11 @@ def jogo():
         for o in lista_x:
             m = MOBs(o,490,52,52,690, vida1, dano1)
             mobs.add(m)
+            if len(mobs) > 8 or len(mobs) > 7:
+                break
+
+    print('Comprimento mobs')
+    print(len(mobs))
 
     while True:
         for evento in pygame.event.get():
@@ -342,7 +350,7 @@ def jogo():
                     direcao = -1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
                     if len(group_tiros) <= 5:
-                        #pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
+                        pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
                         group_tiros.add(
                             Tiro((player.rect.x + (player.rect.width /2)),\
                                  (player.rect.y + 45), 7, VELOCIDADE, direcao))
@@ -356,6 +364,8 @@ def jogo():
             balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
             for bala in balas_atingidas:
                 mob.hit(bala, balas_atingidas)
+                
+
 
         player.update()
         mobs.update()
@@ -368,12 +378,20 @@ def jogo():
         if player.rect.y >= 475:
             player.rect.y =  475
 
-        tela.blit(background_mansao, [0,0])
+        print('len de mobs eh: {0}'.format(len(mobs)))
+        if len(mobs) == 0:
+            print('funfando delicia')
+            background2 = pygame.image.load('Outro_cenario.png')
+            tela.blit(background2, [0,0])
+        else:
+            tela.blit(background, [0,0])
+
         tela.blit(player.image, player.rect)
         group_tiros.draw(tela)
 
         for bixo in mobs:
             bixo.draw()
+
 
         pygame.display.flip()
         pygame.display.update()
