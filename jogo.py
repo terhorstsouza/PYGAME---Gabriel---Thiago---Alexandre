@@ -10,7 +10,7 @@ altura_display = 588
 VELOCIDADE = 10
 music = pygame.mixer.music.load("13_Digital_Native.wav")
 
-#pygame.mixer.music.play(-1)
+pygame.mixer.music.play(-1)
 
 dano1 = 10
 vida1 = 50
@@ -192,17 +192,22 @@ class MOBs(pygame.sprite.Sprite):
                 self.walkCount = 0
 
             if self.vel > 0:
-                tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
+                tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
 
             else:
-                tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
+                tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
+
 
         def move(self):
             if self.vel > 0:
                 if self.x + self.vel < self.path[1]:
-                    self.x += self.vel
+                    if self.x > player.x:
+                        self.x -= self.vel
+                    else:
+                        self.x += self.vel
+
                 else:
                     self.vel = self.vel * -1
                     self.walkCount = 0
@@ -340,7 +345,7 @@ def jogo():
                     direcao = -1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
                     if len(group_tiros) <= 5:
-                        #pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
+                        pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
                         group_tiros.add(
                             Tiro((player.rect.x + (player.rect.width /2)),\
                                  (player.rect.y + 45), 7, VELOCIDADE, direcao))
