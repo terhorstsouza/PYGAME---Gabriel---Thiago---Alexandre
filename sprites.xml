@@ -1,0 +1,13 @@
+<TextureAtlas imagePath="sprites.png">
+	<SubTexture name="R10E.png" x="36" y="55" width="29" height="53"/>
+	<SubTexture name="R11E.png" x="92" y="54" width="23" height="53"/>
+	<SubTexture name="R1E.png" x="67" y="54" width="23" height="53"/>
+	<SubTexture name="R2E.png" x="38" y="0" width="28" height="52"/>
+	<SubTexture name="R3E.png" x="93" y="0" width="20" height="52"/>
+	<SubTexture name="R4E.png" x="68" y="0" width="23" height="52"/>
+	<SubTexture name="R5E.png" x="0" y="55" width="34" height="52"/>
+	<SubTexture name="R6E.png" x="117" y="0" width="21" height="53"/>
+	<SubTexture name="R7E.png" x="117" y="55" width="20" height="53"/>
+	<SubTexture name="R8E.png" x="139" y="55" width="20" height="53"/>
+	<SubTexture name="R9E.png" x="0" y="0" width="36" height="53"/>
+</TextureAtlas>

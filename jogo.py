@@ -8,6 +8,16 @@ pygame.init()
 
 morte = []
 
+background = pygame.image.load("mansao_BG_certo.jpg")
+
+background2 = pygame.image.load('Outro_cenario.png')
+
+background3 = pygame.image.load('cenario_zap.png')
+
+background4 = pygame.image.load('cenario_wow.png')
+
+backgrounds = [background ,background2,background3, background4]
+  
 comprimento_display = 736
 altura_display = 588
 VELOCIDADE = 10
@@ -32,7 +42,7 @@ preto = (0,0,0)
 branco = (255,255,255)
 
 tela_menu = pygame.image.load('menu_BG_2.jpg')
-background = pygame.image.load("mansao_BG_certo.jpg")
+
 
 class Tiro(pygame.sprite.Sprite):
     def __init__ (self, x, y, raio, velocidade, direcao):
@@ -192,7 +202,7 @@ class MOBs(pygame.sprite.Sprite):
         def draw(self):
             self.move()
             if self.walkCount + 1 >= 33:
-                self.walkCount = 0
+                self.walkCount = 0   
 
             if self.vel > 0:
                 tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
@@ -298,7 +308,7 @@ def tela_morte():
             TextSurf, TextRect = texto('faleceu', texto_grande, branco)
             TextRect.center = ((comprimento_display/2), (altura_display/2))
             tela.blit(TextSurf, TextRect)
-            if butao('jogar', 318,425,75,25,(0,255,0),(128,128,128)):                
+            if butao('Jogar Novamente', 318,425,75,25,(0,255,0),(128,128,128)):                
                 return 1
             if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
                 return -1
@@ -328,6 +338,8 @@ group_tiros = pygame.sprite.Group()
 
 def jogo():
 
+    contador_imagem = 0
+
     for w in range(8):
         x = random.randrange(100,600)
         lista_x.append(x)
@@ -337,9 +349,6 @@ def jogo():
             mobs.add(m)
             if len(mobs) > 8 or len(mobs) > 7:
                 break
-
-    print('Comprimento mobs')
-    print(len(mobs))
 
     while True:
         for evento in pygame.event.get():
@@ -366,6 +375,7 @@ def jogo():
             if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
                 print('faleceu')
                 return -2
+                break
             balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
             for bala in balas_atingidas:
                 mob.hit(bala, balas_atingidas)
@@ -383,12 +393,25 @@ def jogo():
         if player.rect.y >= 475:
             player.rect.y =  475
 
-        print('len de mobs eh: {0}'.format(len(mobs)))
         if len(mobs) == 0:
-            print('funfando delicia')
-            background2 = pygame.image.load('Outro_cenario.png')
-            tela.blit(background2, [0,0])
-        else:
+            contador_imagem += 1
+            if contador_imagem == len(backgrounds):
+                contador_imagem = 0
+            background_novo = backgrounds[contador_imagem]
+            for w in range(random.randrange(11,20)):
+                x = random.randrange(100,600)
+                lista_x.append(x)
+                for i in range(15):  
+                    for o in lista_x:
+                        m = MOBs(o,490,52,52,690, vida1, dano1)
+                        mobs.add(m)
+                        if len(mobs) > 8 or len(mobs) > 7:
+                            break
+
+        if len(lista_x) > 8:
+            tela.blit(background_novo, [0,0])
+
+        if len(lista_x) == 8:
             tela.blit(background, [0,0])
 
         tela.blit(player.image, player.rect)
@@ -417,6 +440,19 @@ def gameloop():
             estado = menu()
         elif estado == 1:
             estado = jogo()
+        elif estado == 2:
+            estado = troca_fase()
 
 gameloop()
 pygame.quit()
+
+
+
+#FONTES:
+#
+#https://www.google.com/search?client=firefox-b-ab&biw=1696&bih=829&tbm=isch&sa=1&ei=6PYHW_7OLcqUwgSNjZrwCA&q=background+pixelado+floresta&oq=background+pixelado+floresta&gs_l=img.3...103953.112415.0.112571.34.29.3.2.2.0.146.2800.21j8.29.0....0...1c.1.64.img..0.24.1913...0j35i39k1j0i67k1j0i10k1j0i30k1j0i10i30k1j0i5i10i30k1j0i5i30k1j0i8i30k1.0.jIUYbIBiQaA#imgrc=keYFzz6zbI3HFM:
+#
+#
+#
+#
+#
