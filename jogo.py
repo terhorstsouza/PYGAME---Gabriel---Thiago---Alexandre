@@ -8,7 +8,7 @@ pygame.init()
 
 morte = []
 
-background = pygame.image.load("mansao_BG_certo.jpg")
+background  = pygame.image.load("mansao_BG_certo.jpg")
 
 background2 = pygame.image.load('Outro_cenario.png')
 
@@ -22,6 +22,10 @@ comprimento_display = 736
 altura_display = 588
 VELOCIDADE = 10
 music = pygame.mixer.music.load("13_Digital_Native.wav")
+
+vida_player = 10
+
+dano_mob = 10
 
 pygame.mixer.music.play(-1)
 
@@ -54,6 +58,7 @@ class Tiro(pygame.sprite.Sprite):
         self.rect.y = y
         self.direcao = direcao
         self.vel = velocidade * direcao
+    
     def update(self):
         self.rect.x += self.vel
         if self.rect.x < 0 or self.rect.x > comprimento_display:
@@ -97,8 +102,8 @@ class Neguinho(pygame.sprite.Sprite):
         return clipped_rect
 
     def update(self):
-        if self.directionx == 'left':
-            self.clip(self.left_states)
+        if self.directionx == 'left':  
+            self.clip(self.left_states)  
             self.rect.x -= 5
 
         if self.directiony == 'jump':
@@ -309,10 +314,13 @@ def tela_morte():
             TextRect.center = ((comprimento_display/2), (altura_display/2))
             tela.blit(TextSurf, TextRect)
             if butao('Jogar Novamente', 318,425,75,25,(0,255,0),(128,128,128)):                
-                return 1
+                return 2
             if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
                 return -1
+
+
             pygame.display.update()
+
 
 def menu():
     while True:
@@ -336,7 +344,15 @@ lista_x = []
 
 group_tiros = pygame.sprite.Group()
 
+def reiniciar():
+    vida = 10
+    contador_imagem = 0
+    return 1    
+
+
 def jogo():
+
+    player = Neguinho((0, 475))
 
     contador_imagem = 0
 
@@ -347,7 +363,7 @@ def jogo():
         for o in lista_x:
             m = MOBs(o,490,52,52,690, vida1, dano1)
             mobs.add(m)
-            if len(mobs) > 8 or len(mobs) > 7:
+            if len(mobs) > 8 or len(mobs) > 7: 
                 break
 
     while True:
@@ -373,9 +389,11 @@ def jogo():
 
         for mob in mobs:
             if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
-                print('faleceu')
-                return -2
-                break
+                vida_player -= dano_mob
+                if vida_player == 0:
+                    print('faleceu')
+                    return -2
+                    break
             balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
             for bala in balas_atingidas:
                 mob.hit(bala, balas_atingidas)
@@ -425,6 +443,7 @@ def jogo():
         pygame.display.update()
         relogio.tick(15)
 
+
 def gameloop():
     # Variavel estado: em que estado o jogo se encontra
     # -2: tela de morte
@@ -436,12 +455,14 @@ def gameloop():
     while estado != -1:
         if estado == -2:
             estado = tela_morte()
+        elif estado == -3:
+            estado = nova_tela_morte()
         elif estado == 0:
             estado = menu()
         elif estado == 1:
             estado = jogo()
         elif estado == 2:
-            estado = troca_fase()
+            estado = reiniciar()
 
 gameloop()
 pygame.quit()
