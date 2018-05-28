@@ -34,7 +34,7 @@ vida1 = 50
 
 texto_grande = pygame.font.Font('Kingthings_Calligraphica_2.ttf', 115)
 texto_pequeno = pygame.font.Font('Kingthings_Calligraphica_2.ttf', 30)
-
+tiro = pygame.image.load("bullet.png")
 tela = pygame.display.set_mode((comprimento_display, altura_display))
 pygame.display.set_caption("Python/Pygame Animation")
 relogio = pygame.time.Clock()
@@ -51,8 +51,7 @@ tela_menu = pygame.image.load('menu_BG_2.jpg')
 class Tiro(pygame.sprite.Sprite):
     def __init__ (self, x, y, raio, velocidade, direcao):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((2*raio, 2*raio))
-        pygame.draw.circle(self.image, preto, (0, 0), raio)
+        self.image = tiro
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
