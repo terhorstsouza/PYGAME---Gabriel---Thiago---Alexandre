@@ -54,6 +54,7 @@ class Tiro(pygame.sprite.Sprite):
         self.image = pygame.Surface((2*raio, 2*raio))
         pygame.draw.circle(self.image, preto, (0, 0), raio)
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = x
         self.rect.y = y
         self.direcao = direcao
@@ -75,6 +76,7 @@ class Neguinho(pygame.sprite.Sprite):
         self.image = self.sheet.subsurface(self.sheet.get_clip())
         self.rect = self.image.get_rect()
         self.rect.topleft = position
+        self.mask = pygame.mask.from_surface(self.image)
         self.x = self.rect.x
         self.y = self.rect.y
         self.frame = 0
@@ -199,6 +201,7 @@ class MOBs(pygame.sprite.Sprite):
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
             self.health = 10
             self.rect = self.walkRight[self.walkCount].get_rect()
+            self.mask = pygame.mask.from_surface(self.walkLeft[0])
             self.rect.x = self.x
             self.rect.y = self.y
             self.health = vida
@@ -212,10 +215,12 @@ class MOBs(pygame.sprite.Sprite):
             if self.vel > 0:
                 tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
+                self.mask = pygame.mask.from_surface(self.walkRight[0])
 
             else:
                 tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
                 self.walkCount += 1
+                self.mask = pygame.mask.from_surface(self.walkLeft[0])
 
 
         def move(self):
@@ -388,8 +393,11 @@ def jogo():
             player.handle_event(evento)
 
         for mob in mobs:
+            for morte in pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_mask):
+                print('vc morreu')
+                return -2
             if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
-                vida_player -= dano_mob
+                #vida_player -= dano_mob
                 if vida_player == 0:
                     print('faleceu')
                     return -2
