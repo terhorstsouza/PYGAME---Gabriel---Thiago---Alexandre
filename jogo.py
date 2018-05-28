@@ -326,7 +326,6 @@ def tela_morte():
 
             pygame.display.update()
 
-
 def menu():
     while True:
         for evento in pygame.event.get():
@@ -353,7 +352,6 @@ def reiniciar():
     vida = 10
     contador_imagem = 0
     return 1    
-
 
 def jogo():
 
@@ -405,6 +403,10 @@ def jogo():
             balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
             for bala in balas_atingidas:
                 mob.hit(bala, balas_atingidas)
+                if player.x < mob.x:
+                    mob.x += 5
+                else:
+                    mob.x -= 5
                 
 
 
