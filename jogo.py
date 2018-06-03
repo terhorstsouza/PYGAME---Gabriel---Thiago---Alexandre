@@ -4,7 +4,12 @@ import pygame
 import random
 
 
+
 pygame.init()
+
+with open('HighScore.txt', 'r') as arquivo:
+    HighScore_antigo = arquivo.read()
+
 
 morte = []
 
@@ -26,6 +31,7 @@ music = pygame.mixer.music.load("13_Digital_Native.wav")
 vida_player = 10
 
 dano_mob = 10
+
 
 pygame.mixer.music.play(-1)
 
@@ -241,7 +247,7 @@ class MOBs(pygame.sprite.Sprite):
                     self.walkCount = 0
             self.rect.x = self.x
             self.rect.y = self.y
-
+        numero = 0
         def hit(self, bala, acertos):
             if self.health > 0:
                 self.health -= self.dano
@@ -252,6 +258,7 @@ class MOBs(pygame.sprite.Sprite):
                 morte.append(1)
                 print(len(morte))
                 print('morreu')
+                
 
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
@@ -317,6 +324,20 @@ def tela_morte():
             TextSurf, TextRect = texto('faleceu', texto_grande, branco)
             TextRect.center = ((comprimento_display/2), (altura_display/2))
             tela.blit(TextSurf, TextRect)
+            if pontuacao[0] > int(HighScore_antigo):
+                fonte_highscore = pygame.font.SysFont(None, 50)
+                texto_seuscore = fonte_highscore.render("Sua Pontuação: "+str(pontuacao[0]), True, branco)
+                texto_highscore = fonte_highscore.render("Highscore: "+str(pontuacao[0]), True, branco)
+
+                with open('HighScore.txt', 'w') as arquivo:
+                    arquivo.write(str(pontuacao[0]))
+
+            else:
+                fonte_highscore = pygame.font.SysFont(None, 50)
+                texto_seuscore = fonte_highscore.render("Sua Pontuação: "+str(pontuacao[0]), True, branco)
+                texto_highscore = fonte_highscore.render("Highscore: "+str(HighScore_antigo), True, branco)
+            tela.blit(texto_seuscore,(15,15))
+            tela.blit(texto_highscore,(50,50))
             if butao('Jogar Novamente', 318,425,75,25,(0,255,0),(128,128,128)):                
                 return 2
             if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
@@ -350,8 +371,25 @@ group_tiros = pygame.sprite.Group()
 def reiniciar():
     vida = 10
     contador_imagem = 0
-    return 1    
+    return 1
 
+def ScoreBoard(grupo,mobz,pontuacao):
+    if grupo > len(mobz):
+        resultado = grupo - len(mobz)
+        print('resultado vale {0}'.format(resultado))
+        pontuacao[0] += (15*resultado)
+        print('pontuação é: {0}'.format(pontuacao[0]))  
+    fonte_score = pygame.font.SysFont(None, 25)
+    texto_score = fonte_score.render("Pontuação: "+str(pontuacao[0]), True, preto)
+    tela.blit(texto_score,(15,15))
+
+    pygame.display.update()  
+
+    print('WORKING')  
+
+    return 1
+
+pontuacao = [0]
 def jogo():
 
     player = Neguinho((0, 475))
@@ -367,6 +405,8 @@ def jogo():
             mobs.add(m)
             if len(mobs) > 8 or len(mobs) > 7: 
                 break
+
+    grupo_mobs = len(mobs)
 
     while True:
         for evento in pygame.event.get():
@@ -394,7 +434,7 @@ def jogo():
                 print('vc morreu')
                 return -2
             if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
-                #vida_player -= dano_mob
+                vida_player -= dano_mob
                 if vida_player == 0:
                     print('faleceu')
                     return -2
@@ -420,6 +460,7 @@ def jogo():
         if player.rect.y >= 475:
             player.rect.y =  475
 
+
         if len(mobs) == 0:
             contador_imagem += 1
             if contador_imagem == len(backgrounds):
@@ -432,8 +473,10 @@ def jogo():
                     for o in lista_x:
                         m = MOBs(o,490,52,52,690, vida1, dano1)
                         mobs.add(m)
+                        grupo_mobs = len(mobs)
                         if len(mobs) > 8 or len(mobs) > 7:
-                            break
+                            break                
+        
 
         if len(lista_x) > 8:
             tela.blit(background_novo, [0,0])
@@ -447,7 +490,7 @@ def jogo():
         for bixo in mobs:
             bixo.draw()
 
-
+        ScoreBoard(grupo_mobs,mobs,pontuacao)
         pygame.display.flip()
         pygame.display.update()
         relogio.tick(15)
@@ -464,15 +507,22 @@ def gameloop():
     while estado != -1:
         if estado == -2:
             estado = tela_morte()
+        
         elif estado == -3:
             estado = nova_tela_morte()
+        
         elif estado == 0:
             estado = menu()
+
         elif estado == 1:
             estado = jogo()
+        
         elif estado == 2:
             estado = reiniciar()
 
+
+        
+            
 gameloop()
 pygame.quit()
 
@@ -481,7 +531,7 @@ pygame.quit()
 #FONTES:
 #
 #https://www.google.com/search?client=firefox-b-ab&biw=1696&bih=829&tbm=isch&sa=1&ei=6PYHW_7OLcqUwgSNjZrwCA&q=background+pixelado+floresta&oq=background+pixelado+floresta&gs_l=img.3...103953.112415.0.112571.34.29.3.2.2.0.146.2800.21j8.29.0....0...1c.1.64.img..0.24.1913...0j35i39k1j0i67k1j0i10k1j0i30k1j0i10i30k1j0i5i10i30k1j0i5i30k1j0i8i30k1.0.jIUYbIBiQaA#imgrc=keYFzz6zbI3HFM:
-#
+#https://pythonprogramming.net/adding-score-pygame-video-game/
 #
 #
 #
