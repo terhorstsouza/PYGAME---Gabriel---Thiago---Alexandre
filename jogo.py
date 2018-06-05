@@ -247,6 +247,7 @@ class MOBs(pygame.sprite.Sprite):
                     self.walkCount = 0
             self.rect.x = self.x
             self.rect.y = self.y
+
         numero = 0
         def hit(self, bala, acertos):
             if self.health > 0:
@@ -324,21 +325,24 @@ def tela_morte():
             TextSurf, TextRect = texto('faleceu', texto_grande, branco)
             TextRect.center = ((comprimento_display/2), (altura_display/2))
             tela.blit(TextSurf, TextRect)
+            
             if pontuacao[0] > int(HighScore_antigo):
                 fonte_highscore = pygame.font.SysFont(None, 50)
                 texto_seuscore = fonte_highscore.render("Sua Pontuação: "+str(pontuacao[0]), True, branco)
                 texto_highscore = fonte_highscore.render("Highscore: "+str(pontuacao[0]), True, branco)
 
                 with open('HighScore.txt', 'w') as arquivo:
-                    arquivo.write(str(pontuacao[0]))
+                    arquivo.write(str(pontuacao[0])) 
 
             else:
                 fonte_highscore = pygame.font.SysFont(None, 50)
                 texto_seuscore = fonte_highscore.render("Sua Pontuação: "+str(pontuacao[0]), True, branco)
                 texto_highscore = fonte_highscore.render("Highscore: "+str(HighScore_antigo), True, branco)
+                
             tela.blit(texto_seuscore,(15,15))
             tela.blit(texto_highscore,(50,50))
-            if butao('Jogar Novamente', 318,425,75,25,(0,255,0),(128,128,128)):                
+            if butao('Jogar Novamente', 318,425,75,25,(0,255,0),(128,128,128)):
+                pontuacao[0] = 0                 
                 return 2
             if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
                 return -1
@@ -374,6 +378,7 @@ def reiniciar():
     return 1
 
 def ScoreBoard(grupo,mobz,pontuacao):
+
     if grupo > len(mobz):
         resultado = grupo - len(mobz)
         print('resultado vale {0}'.format(resultado))
@@ -394,20 +399,12 @@ def jogo():
 
     player = Neguinho((0, 475))
 
-    contador_imagem = 0
+    contador_imagem = 'comeco'
 
-    for w in range(8):
-        x = random.randrange(100,600)
-        lista_x.append(x)
-    for i in range(8):
-        for o in lista_x:
-            m = MOBs(o,490,52,52,690, vida1, dano1)
-            mobs.add(m)
-            if len(mobs) > 8 or len(mobs) > 7: 
-                break
+    reinicio = True
 
-    grupo_mobs = len(mobs)
 
+    
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -429,43 +426,24 @@ def jogo():
 
             player.handle_event(evento)
 
-        for mob in mobs:
-            for morte in pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_mask):
-                print('vc morreu')
-                return -2
-            if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
-                vida_player -= dano_mob
-                if vida_player == 0:
-                    print('faleceu')
-                    return -2
-                    break
-            balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
-            for bala in balas_atingidas:
-                mob.hit(bala, balas_atingidas)
-                if player.x < mob.x:
-                    mob.x += 5
-                else:
-                    mob.x -= 5
-                
+        if contador_imagem == 'comeco' and reinicio == True:
+            for w in range(8):
+                x = random.randrange(100,600)
+                lista_x.append(x)
+            for i in range(8):
+                for o in lista_x:
+                    m = MOBs(o,490,52,52,690, vida1, dano1)
+                    mobs.add(m)
+                    contador_imagem = 0
+                    if len(mobs) > 8 or len(mobs) > 7: 
+                        break
 
-
-        player.update()
-        mobs.update()
-        group_tiros.update()
-
-        if player.rect.x <= 0:
-            player.rect.x = 0
-        if player.rect.x >= 736 - player.rect.width:
-            player.rect.x = 736 - player.rect.width
-        if player.rect.y >= 475:
-            player.rect.y =  475
-
+        grupo_mobs = len(mobs)
 
         if len(mobs) == 0:
             contador_imagem += 1
             if contador_imagem == len(backgrounds):
                 contador_imagem = 0
-            background_novo = backgrounds[contador_imagem]
             for w in range(random.randrange(11,20)):
                 x = random.randrange(100,600)
                 lista_x.append(x)
@@ -475,13 +453,42 @@ def jogo():
                         mobs.add(m)
                         grupo_mobs = len(mobs)
                         if len(mobs) > 8 or len(mobs) > 7:
-                            break                
-        
+                            break 
 
+
+        for mob in mobs:
+            for morte in pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_mask):
+                print('vc morreu')
+                return -2
+            if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
+                vida_player -= dano_mob
+                if vida_player == 0:
+                    print('faleceu')
+                    reinicio = False
+                    return -2
+                    break
+            balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
+            for bala in balas_atingidas:
+                mob.hit(bala, balas_atingidas)
+                if player.x < mob.x:
+                    mob.x += 5
+                else:
+                    mob.x -= 5
+
+            if player.rect.x <= 0:
+                player.rect.x = 0
+            if player.rect.x >= 736 - player.rect.width:
+                player.rect.x = 736 - player.rect.width
+            if player.rect.y >= 475:
+                player.rect.y =  475
+
+
+        background_novo = backgrounds[contador_imagem]              
+        
         if len(lista_x) > 8:
             tela.blit(background_novo, [0,0])
 
-        if len(lista_x) == 8:
+        if len(lista_x) == 8 and reinicio == True:
             tela.blit(background, [0,0])
 
         tela.blit(player.image, player.rect)
@@ -490,7 +497,12 @@ def jogo():
         for bixo in mobs:
             bixo.draw()
 
+        
+
         ScoreBoard(grupo_mobs,mobs,pontuacao)
+        player.update()
+        mobs.update()
+        group_tiros.update()
         pygame.display.flip()
         pygame.display.update()
         relogio.tick(15)
@@ -517,7 +529,7 @@ def gameloop():
         elif estado == 1:
             estado = jogo()
         
-        elif estado == 2:
+        elif estado == 2: 
             estado = reiniciar()
 
 
@@ -532,7 +544,7 @@ pygame.quit()
 #
 #https://www.google.com/search?client=firefox-b-ab&biw=1696&bih=829&tbm=isch&sa=1&ei=6PYHW_7OLcqUwgSNjZrwCA&q=background+pixelado+floresta&oq=background+pixelado+floresta&gs_l=img.3...103953.112415.0.112571.34.29.3.2.2.0.146.2800.21j8.29.0....0...1c.1.64.img..0.24.1913...0j35i39k1j0i67k1j0i10k1j0i30k1j0i10i30k1j0i5i10i30k1j0i5i30k1j0i8i30k1.0.jIUYbIBiQaA#imgrc=keYFzz6zbI3HFM:
 #https://pythonprogramming.net/adding-score-pygame-video-game/
-#
+#https://www.youtube.com/watch?v=vc1pJ8XdZa0
 #
 #
 #
