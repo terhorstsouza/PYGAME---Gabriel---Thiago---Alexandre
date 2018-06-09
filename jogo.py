@@ -54,6 +54,7 @@ branco = (255,255,255)
 tela_menu = pygame.image.load('menu_BG_2.jpg')
 
 
+
 class Tiro(pygame.sprite.Sprite):
     def __init__ (self, x, y, raio, velocidade, direcao):
         pygame.sprite.Sprite.__init__(self)
@@ -64,7 +65,7 @@ class Tiro(pygame.sprite.Sprite):
         self.rect.y = y
         self.direcao = direcao
         self.vel = velocidade * direcao
-    
+
     def update(self):
         self.rect.x += self.vel
         if self.rect.x < 0 or self.rect.x > comprimento_display:
@@ -303,13 +304,16 @@ def pause():
                 elif event.key == pygame.K_q:
                     pygame.quit()
                     quit()
+                elif event.key == pygame.K_e:
+                    pausado = 1
+                    Controles(pausado)
 
         TextSurf, TextRect = texto('Pausado', texto_grande, preto)
-        TextRect.center = ((comprimento_display/2), (altura_display/2))
+        TextRect.center = ((300), (75))
         tela.blit(TextSurf, TextRect)
 
-        TextSurf, TextRect = texto('Pressione C para continuar ou Q para sair', texto_pequeno, preto)
-        TextRect.center = ((comprimento_display/3), (altura_display/3))
+        TextSurf, TextRect = texto('Pressione C para continuar, Q para sair ou E para ver as instruções', texto_pequeno, preto)
+        TextRect.center = ((comprimento_display/2), (altura_display/2))
         tela.blit(TextSurf, TextRect)
 
         pygame.display.update()
@@ -362,8 +366,58 @@ def menu():
 
         if butao('jogar', 318,425,75,25,(0,255,0),(128,128,128)):
             return 1
-        if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
+        if butao('sair', 318,525,75,25,(255,0,0),(128,128,128)):
             return -1
+
+        if butao('comandos',318,475,75,25,(0,255,0),(128,128,128)):
+            return 3
+
+        pygame.display.update()
+        relogio.tick(15)
+        
+
+def Controles(pausado):
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return -1
+
+        if pausado == 1:
+            tela.blit(tela_menu,[0,0])
+            TextSurf, TextRect = texto('Controles', texto_grande, branco)
+            TextRect.center = ((394), (75))
+            tela.blit(TextSurf, TextRect)
+            TextSurf, TextRect = texto('W,A,S,D para movimentar o personagem', texto_pequeno, branco)
+            TextRect.center = ((300), (250))
+            tela.blit(TextSurf, TextRect)
+            TextSurf, TextRect = texto('Barra de Espaço para atirar', texto_pequeno, branco)
+            TextRect.center = ((300), (275))
+            tela.blit(TextSurf, TextRect)
+            TextSurf, TextRect = texto('P para pausar', texto_pequeno, branco)
+            TextRect.center = ((300), (300))
+            tela.blit(TextSurf, TextRect)
+
+            if butao('retornar ao jogo',318,450,75,25,(0,255,0),(128,128,128)):
+                tela.blit(background,[0,0])
+                return 4
+        
+        else:
+            tela.blit(tela_menu,[0,0])
+            TextSurf, TextRect = texto('Controles', texto_grande, branco)
+            TextRect.center = ((394), (75))
+            tela.blit(TextSurf, TextRect)
+            TextSurf, TextRect = texto('W,A,S,D para movimentar o personagem', texto_pequeno, branco)
+            TextRect.center = ((300), (250))
+            tela.blit(TextSurf, TextRect)
+            TextSurf, TextRect = texto('Barra de Espaço para atirar', texto_pequeno, branco)
+            TextRect.center = ((300), (275))
+            tela.blit(TextSurf, TextRect)
+            TextSurf, TextRect = texto('P para pausar', texto_pequeno, branco)
+            TextRect.center = ((300), (300))
+            tela.blit(TextSurf, TextRect)
+
+            if butao('retornar ao menu', 318,450,75,25,(0,255,0),(128,128,128)):
+                return 0
 
         pygame.display.update()
         relogio.tick(15)
@@ -413,7 +467,7 @@ def jogo():
                 if evento.key == pygame.K_p:
                     pause()
 
-                if evento.key == pygame.K_d:
+                if evento.key == pygame.K_d: 
                     direcao = 1
                 if evento.key == pygame.K_a:
                     direcao = -1
@@ -531,6 +585,13 @@ def gameloop():
         
         elif estado == 2: 
             estado = reiniciar()
+
+        elif estado == 3:
+            pausado = 0
+            estado = Controles(pausado)
+
+        elif estado == 4:
+            estado = pause()
 
 
         
