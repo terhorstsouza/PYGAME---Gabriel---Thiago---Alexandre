@@ -32,6 +32,7 @@ vida_player = 10
 
 dano_mob = 10
 
+tela_HUB = pygame.image.load('tela_Hub.png')
 
 pygame.mixer.music.play(-1)
 
@@ -52,6 +53,15 @@ preto = (0,0,0)
 branco = (255,255,255)
 
 tela_menu = pygame.image.load('menu_BG_2.jpg')
+
+jogador1 = pygame.image.load('jogador1.png')
+jogador2 = pygame.image.load('jogador2.png')
+jogador3 = pygame.image.load('jogador3.png')
+jogador4 = pygame.image.load('jogador4.png')
+jogador5 = pygame.image.load('jogador5.png')
+jogador6 = pygame.image.load('jogador6.png')
+jogador7 = pygame.image.load('jogador7.png')
+jogador8 = pygame.image.load('jogador8.png')
 
 
 
@@ -75,9 +85,27 @@ class Neguinho(pygame.sprite.Sprite):
 
     parado = True
 
-    def __init__(self, position):
+    def __init__(self, position,personagem):
         pygame.sprite.Sprite.__init__(self)
-        self.sheet = pygame.image.load('personagem.png')
+
+        self.personagem = personagem
+        if self.personagem == jogador1:
+            self.sheet = pygame.image.load('personagem.png')
+        elif self.personagem == jogador2:
+            self.sheet = pygame.image.load('personagem2.png')
+        elif self.personagem == jogador3:
+            self.sheet = pygame.image.load('personagem3.png')
+        elif self.personagem == jogador4:
+            self.sheet = pygame.image.load('personagem4.png')
+        elif self.personagem == jogador5:
+            self.sheet = pygame.image.load('personagem5.png')
+        elif self.personagem == jogador6:
+            self.sheet = pygame.image.load('personagem6.png')
+        elif self.personagem == jogador7:
+            self.sheet = pygame.image.load('personagem7.png')
+        elif self.personagem == jogador8:
+            self.sheet = pygame.image.load('personagem8.png')
+
         self.sheet.set_clip(pygame.Rect(0, 0, 52, 76))
         self.image = self.sheet.subsurface(self.sheet.get_clip())
         self.rect = self.image.get_rect()
@@ -177,7 +205,7 @@ class Neguinho(pygame.sprite.Sprite):
                 if self.rect.y <= 475:
                     self.directiony = 'baixo'
 
-player = Neguinho((0, 475))
+
 
 class MOBs(pygame.sprite.Sprite):
         walkRight = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'),\
@@ -261,9 +289,6 @@ class MOBs(pygame.sprite.Sprite):
                 print(len(morte))
                 print('morreu')
                 
-
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
 mobs = pygame.sprite.Group()
 
 def texto(texto, fonte, cor):
@@ -365,7 +390,7 @@ def menu():
         tela.blit(TextSurf, TextRect)
 
         if butao('jogar', 318,425,75,25,(0,255,0),(128,128,128)):
-            return 1
+            return 5
         if butao('sair', 318,525,75,25,(255,0,0),(128,128,128)):
             return -1
 
@@ -422,6 +447,99 @@ def Controles(pausado):
         pygame.display.update()
         relogio.tick(15)
 
+
+def Comeco():
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return -1
+
+        
+        tela.fill(preto)
+        TextSurf, TextRect = texto('Vamos Começar?', texto_grande, branco)
+        TextRect.center = ((375), (75))
+        tela.blit(TextSurf, TextRect)
+
+        if butao('SIM!',300,450,100,50,(0,255,0),(128,128,128)):
+            return 1
+
+
+        pygame.display.update()
+        relogio.tick(15)
+
+            
+def character():
+
+    global player
+
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return -1
+
+        tela.blit(tela_HUB,[0,0])
+        TextSurf, TextRect = texto('Selecione seu personagem', texto_pequeno, branco)
+        TextRect.center = ((350), (75))
+        tela.blit(TextSurf, TextRect)
+
+        tela.blit(jogador1, [50,200])
+        tela.blit(jogador2, [150,200])
+        tela.blit(jogador3, [250,200])
+        tela.blit(jogador4, [350,200])
+        tela.blit(jogador5, [450,200])
+        tela.blit(jogador6, [550,200])
+        tela.blit(jogador7, [650,200])
+        tela.blit(jogador8, [400,300])
+
+        if butao('Bahia',50,250,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador1)
+            return 6
+       
+
+        if butao('Alê',150,250,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador2)
+            return 6
+         
+
+        if butao('Terhorst',250,250,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador3)
+            print('ma oe')
+            return 6
+           
+
+        if butao('Abel',350,250,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador4)
+            return 6
+            
+
+        if butao('Weiser',450,250,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador5)
+            return 6
+           
+
+        if butao('Balkins',550,250,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador6)
+            return 6
+           
+
+        if butao('Duds',650,250,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador7)
+            return 6
+            
+
+        if butao('Luvi',400,350,75,25,(0,255,0),(128,128,128)):
+            player = Neguinho((0,475),jogador8)
+            return 6
+            
+            
+
+
+        pygame.display.update()
+        relogio.tick(15)
+
+    all_sprites = pygame.sprite.Group()
+    all_sprites.add(player)
+
 lista_x = []
 
 group_tiros = pygame.sprite.Group()
@@ -450,8 +568,6 @@ def ScoreBoard(grupo,mobz,pontuacao):
 
 pontuacao = [0]
 def jogo():
-
-    player = Neguinho((0, 475))
 
     contador_imagem = 'comeco'
 
@@ -593,6 +709,12 @@ def gameloop():
         elif estado == 4:
             estado = pause()
 
+        elif estado == 5:
+            estado = character()
+
+        elif estado == 6:
+            estado = Comeco()
+
 
         
             
@@ -606,6 +728,11 @@ pygame.quit()
 #https://www.google.com/search?client=firefox-b-ab&biw=1696&bih=829&tbm=isch&sa=1&ei=6PYHW_7OLcqUwgSNjZrwCA&q=background+pixelado+floresta&oq=background+pixelado+floresta&gs_l=img.3...103953.112415.0.112571.34.29.3.2.2.0.146.2800.21j8.29.0....0...1c.1.64.img..0.24.1913...0j35i39k1j0i67k1j0i10k1j0i30k1j0i10i30k1j0i5i10i30k1j0i5i30k1j0i8i30k1.0.jIUYbIBiQaA#imgrc=keYFzz6zbI3HFM:
 #https://pythonprogramming.net/adding-score-pygame-video-game/
 #https://www.youtube.com/watch?v=vc1pJ8XdZa0
-#
-#
+#https://lagoon-sadnes.deviantart.com/art/Shadow-Alpha-RPG-Sprites-376877868
+#https://forum.chaos-project.com/index.php?topic=13563.0
+#https://forums.rpgmakerweb.com/index.php?threads/how-do-i-use-different-sprites-for-the-overworld-map.87375/
+#https://m.forocoches.com/foro/showthread.php?t=4837674&page=6
+#https://lagoon-sadnes.deviantart.com/art/Playable-character-Hope-RPG-sprite-sheet-562827997
+#https://lagoon-sadnes.deviantart.com/art/Anonymous-Sprites-RPG-Maker-XP-344225765
+#http://www.hbgames.org/forums/viewtopic.php?f=10&t=75960
 #
