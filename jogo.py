@@ -274,8 +274,6 @@ class MOBs(pygame.sprite.Sprite):
 			pygame.sprite.spritecollide(bala, mobs, True)
 			morte.append(1)
 
-# all_sprites = pygame.sprite.Group()
-# all_sprites.add(player)
 mobs = pygame.sprite.Group()
 
 def texto(texto, fonte, cor):
@@ -559,11 +557,12 @@ def jogo():
 				return -1
 			if evento.type == pygame.KEYDOWN:
 				if evento.key == pygame.K_p:
-					pause()
-				if evento.key == pygame.K_d:
+					pause() = - 1
+				if player.directionx == 'stand_left' or player.directionx == 'left':
+					direcao = -1
+				elif player.directionx == 'stand_right' or player.directionx == 'right':
 					direcao = 1
-				if evento.key == pygame.K_a:
-					direcao = - 1
+
 				if pygame.key.get_pressed()[pygame.K_SPACE]:
 					if len(group_tiros) <= 5:
 						# pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
