@@ -203,9 +203,7 @@ class Neguinho(pygame.sprite.Sprite):
 
             if event.key == pygame.K_w:
                 if self.rect.y <= 475:
-                    self.directiony = 'baixo'
-
-
+                    self.directiony = 'baixo'  
 
 class MOBs(pygame.sprite.Sprite):
         walkRight = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'),\
