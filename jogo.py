@@ -19,7 +19,15 @@ background3 = pygame.image.load('cenario_zap.png')
 
 background4 = pygame.image.load('cenario_wow.png')
 
-backgrounds = [background ,background2,background3, background4]
+background5 = pygame.image.load('NOVO_CENARIO_1.png')
+
+background6 = pygame.image.load('cenario_caverna.png')
+
+background7 = pygame.image.load('cenario_floresta.png')
+
+background8 = pygame.image.load('cenario_mario.png')
+
+backgrounds = [background ,background2,background3, background4, background5,background6,background7,background8]
 
 comprimento_display = 736
 altura_display = 588
@@ -306,7 +314,6 @@ class Moedas(pygame.sprite.Sprite):
 
         self.clip(self.right_states)
         self.image = self.sheet.subsurface(self.sheet.get_clip())
-
 
 def texto(texto, fonte, cor):
     tipo_texto = fonte.render(texto, True, cor)
