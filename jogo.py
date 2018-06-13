@@ -50,17 +50,11 @@ posicao_porta = 730
 preto = (0,0,0)
 branco = (255,255,255)
 
-tela_menu = pygame.image.load('menu_BG_2.jpg')
+tela_menu = pygame.image.load('MENUU.png')
 
 jogador1 = pygame.image.load('jogador1.png')
 jogador2 = pygame.image.load('jogador2.png')
 jogador3 = pygame.image.load('jogador3.png')
-jogador4 = pygame.image.load('jogador4.png')
-jogador5 = pygame.image.load('jogador5.png')
-jogador6 = pygame.image.load('jogador6.png')
-jogador7 = pygame.image.load('jogador7.png')
-jogador8 = pygame.image.load('jogador8.png')
-
 
 
 class Tiro(pygame.sprite.Sprite):
@@ -93,17 +87,6 @@ class Neguinho(pygame.sprite.Sprite):
             self.sheet = pygame.image.load('personagem2.png')
         elif self.personagem == jogador3:
             self.sheet = pygame.image.load('personagem3.png')
-        elif self.personagem == jogador4:
-            self.sheet = pygame.image.load('personagem4.png')
-        elif self.personagem == jogador5:
-            self.sheet = pygame.image.load('personagem5.png')
-        elif self.personagem == jogador6:
-            self.sheet = pygame.image.load('personagem6.png')
-        elif self.personagem == jogador7:
-            self.sheet = pygame.image.load('personagem7.png')
-        elif self.personagem == jogador8:
-            self.sheet = pygame.image.load('personagem8.png')
-
         self.sheet.set_clip(pygame.Rect(0, 0, 52, 76))
         self.image = self.sheet.subsurface(self.sheet.get_clip())
         self.rect = self.image.get_rect()
@@ -203,6 +186,7 @@ class Neguinho(pygame.sprite.Sprite):
                 if self.rect.y <= 475:
                     self.directiony = 'baixo'  
 
+mobs = pygame.sprite.Group()
 class MOBs(pygame.sprite.Sprite):
     walkRight = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'),\
                 pygame.image.load('R3E.png'), pygame.image.load('R4E.png'),\
@@ -278,9 +262,51 @@ class MOBs(pygame.sprite.Sprite):
             pygame.sprite.spritecollide(bala, mobs, True)
             morte.append(1)
 
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
-mobs = pygame.sprite.Group()
+class Moedas(pygame.sprite.Sprite):
+
+    parado = True
+
+    def __init__(self, position):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.sheet = pygame.image.load('COINS.jpg')
+        self.sheet.set_clip(pygame.Rect(0, 0, 52, 76))
+        self.image = self.sheet.subsurface(self.sheet.get_clip())
+        self.rect = self.image.get_rect()
+        self.rect.topleft = position
+        self.mask = pygame.mask.from_surface(self.image)
+        self.x = self.rect.x
+        self.y = self.rect.y
+        self.frame = 0
+        self.vy = 0
+        self.ay = 1
+        self.pulo = 15
+        self.left_states = { 0: (0, 76, 52, 76), 1: (52, 76, 52, 76),\
+                            2: (156, 76, 52, 76) }
+        self.right_states = { 0: (0, 152, 52, 76), 1: (52, 152, 52, 76),\
+                            2: (156, 152, 52, 76) }
+        self.directionx = 'stand_left'
+        self.directiony = 'stand_right'
+
+
+    def get_frame(self, frame_set):
+        self.frame += 1
+        if self.frame > (len(frame_set) - 1):
+            self.frame = 0
+        return frame_set[self.frame]
+
+    def clip(self, clipped_rect):
+        if type(clipped_rect) is dict:
+            self.sheet.set_clip(pygame.Rect(self.get_frame(clipped_rect)))
+        else:
+            self.sheet.set_clip(pygame.Rect(clipped_rect))
+        return clipped_rect
+
+    def update(self):
+
+        self.clip(self.right_states)
+        self.image = self.sheet.subsurface(self.sheet.get_clip())
+
 
 def texto(texto, fonte, cor):
     tipo_texto = fonte.render(texto, True, cor)
@@ -476,58 +502,28 @@ def character():
         TextRect.center = ((350), (75))
         tela.blit(TextSurf, TextRect)
 
-        tela.blit(jogador1, [50,200])
-        tela.blit(jogador2, [150,200])
-        tela.blit(jogador3, [250,200])
-        tela.blit(jogador4, [350,200])
-        tela.blit(jogador5, [450,200])
-        tela.blit(jogador6, [550,200])
-        tela.blit(jogador7, [650,200])
-        tela.blit(jogador8, [400,300])
+        tela.blit(jogador1, [175,200])
+        tela.blit(jogador2, [375,200])
+        tela.blit(jogador3, [575,200])
 
-        if butao('Bahia',50,250,75,25,(0,255,0),(128,128,128)):
+
+        if butao('Bahia',170,270,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador1)
             return 6
 
 
-        if butao('Alê',150,250,75,25,(0,255,0),(128,128,128)):
+        if butao('Alê',350,270,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador2)
             return 6
 
 
-        if butao('Terhorst',250,250,75,25,(0,255,0),(128,128,128)):
+        if butao('Terhorst',550,270,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador3)
             print('ma oe')
             return 6
 
 
-        if butao('Abel',350,250,75,25,(0,255,0),(128,128,128)):
-            player = Neguinho((0,475),jogador4)
-            return 6
-
-
-        if butao('Weiser',450,250,75,25,(0,255,0),(128,128,128)):
-            player = Neguinho((0,475),jogador5)
-            return 6
-
-
-        if butao('Balkins',550,250,75,25,(0,255,0),(128,128,128)):
-            player = Neguinho((0,475),jogador6)
-            return 6
-
-
-        if butao('Duds',650,250,75,25,(0,255,0),(128,128,128)):
-            player = Neguinho((0,475),jogador7)
-            return 6
-
-
-        if butao('Luvi',400,350,75,25,(0,255,0),(128,128,128)):
-            player = Neguinho((0,475),jogador8)
-            return 6
-
-
-
-
+        
         pygame.display.update()
         relogio.tick(15)
 
@@ -561,6 +557,12 @@ def ScoreBoard(grupo,mobz,pontuacao):
 pontuacao = [0]
 
 def jogo():
+
+    all_sprites = pygame.sprite.Group()
+    all_sprites.add(player)
+    
+
+    coin = Moedas((400,400))
 
     contador_imagem = 'comeco'
 
@@ -672,6 +674,7 @@ def jogo():
         ScoreBoard(grupo_mobs,mobs,pontuacao)
         player.update()
         mobs.update()
+        coin.update()
         group_tiros.update()
         pygame.display.flip()
         pygame.display.update()
