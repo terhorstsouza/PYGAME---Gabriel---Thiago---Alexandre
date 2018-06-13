@@ -21,7 +21,7 @@ background5 = pygame.image.load('NOVO_CENARIO_1.png')
 background6 = pygame.image.load('cenario_caverna.png')
 background7 = pygame.image.load('cenario_floresta.png')
 background8 = pygame.image.load('cenario_mario.png')
-brackground9 = pygame.image.load('lua.png')
+background9 = pygame.image.load('lua.png')
 
 #Aqui criamos uma lista dos backgrounds
 backgrounds = [background ,background2,background3, background4, background5,background6,background7,background8,background9]
