@@ -1,15 +1,13 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import pygame
 import random
-
-
 
 pygame.init()
 
 with open('HighScore.txt', 'r') as arquivo:
     HighScore_antigo = arquivo.read()
-
 
 morte = []
 
@@ -22,7 +20,7 @@ background3 = pygame.image.load('cenario_zap.png')
 background4 = pygame.image.load('cenario_wow.png')
 
 backgrounds = [background ,background2,background3, background4]
-  
+
 comprimento_display = 736
 altura_display = 588
 VELOCIDADE = 10
@@ -34,7 +32,7 @@ dano_mob = 10
 
 tela_HUB = pygame.image.load('tela_Hub.png')
 
-pygame.mixer.music.play(-1)
+# pygame.mixer.music.play(-1)
 
 dano1 = 10
 vida1 = 50
@@ -138,25 +136,25 @@ class Neguinho(pygame.sprite.Sprite):
         return clipped_rect
 
     def update(self):
-        if self.directionx == 'left':  
-            self.clip(self.left_states)  
+        if self.directionx == 'left':
+            self.clip(self.left_states)
             self.rect.x -= 5
 
         if self.directiony == 'jump':
             self.vy += self.ay
             self.rect.y += self.vy
-	
+
         if self.directiony == 'baixo':
             if self.rect.y <475:
                 gravidade = 50
                 self.rect.y += gravidade
-	
+
         if self.directiony == 'jump' and self.directionx == 'right':
             self.vy += self.ay
             self.rect.y += self.vy
             self.clip(self.right_states)
             self.rect.x += 5
-            
+
         if self.directiony == 'jump' and self.directionx == 'left':
             self.vy += self.ay
             self.rect.y += self.vy
@@ -183,7 +181,7 @@ class Neguinho(pygame.sprite.Sprite):
 
             if event.key == pygame.K_d:
                 self.directionx = 'right'
-	    
+
             if event.key == pygame.K_w:
                 if self.rect.y == 475:
                     self.vy = -15
@@ -206,87 +204,82 @@ class Neguinho(pygame.sprite.Sprite):
                     self.directiony = 'baixo'  
 
 class MOBs(pygame.sprite.Sprite):
-        walkRight = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'),\
-                    pygame.image.load('R3E.png'), pygame.image.load('R4E.png'),\
-                    pygame.image.load('R5E.png'), pygame.image.load('R6E.png'),\
-                    pygame.image.load('R7E.png'), pygame.image.load('R8E.png'),\
-                    pygame.image.load('R9E.png'), pygame.image.load('R10E.png'),\
-                    pygame.image.load('R11E.png')]
+    walkRight = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'),\
+                pygame.image.load('R3E.png'), pygame.image.load('R4E.png'),\
+                pygame.image.load('R5E.png'), pygame.image.load('R6E.png'),\
+                pygame.image.load('R7E.png'), pygame.image.load('R8E.png'),\
+                pygame.image.load('R9E.png'), pygame.image.load('R10E.png'),\
+                pygame.image.load('R11E.png')]
 
-        walkLeft = [pygame.image.load('L1E.png'), pygame.image.load('L2E.png'),\
-                    pygame.image.load('L3E.png'), pygame.image.load('L4E.png'),\
-                    pygame.image.load('L5E.png'), pygame.image.load('L6E.png'),\
-                    pygame.image.load('L7E.png'), pygame.image.load('L8E.png'),\
-                    pygame.image.load('L9E.png'), pygame.image.load('L10E.png'),\
-                    pygame.image.load('L11E.png')]
+    walkLeft = [pygame.image.load('L1E.png'), pygame.image.load('L2E.png'),\
+                pygame.image.load('L3E.png'), pygame.image.load('L4E.png'),\
+                pygame.image.load('L5E.png'), pygame.image.load('L6E.png'),\
+                pygame.image.load('L7E.png'), pygame.image.load('L8E.png'),\
+                pygame.image.load('L9E.png'), pygame.image.load('L10E.png'),\
+                pygame.image.load('L11E.png')]
 
-        def __init__(self, x, y, width, height, end, vida, dano):
-            pygame.sprite.Sprite.__init__(self)
-            self.x = x
-            self.y = y
-            self.width = width
-            self.height = height
-            self.end = end
-            self.path = [self.x, self.end]
+    def __init__(self, x, y, width, height, end, vida, dano, direcao):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.end = end
+        self.path = [self.x, self.end]
+        self.walkCount = 0
+        self.vel = 3
+        self.hitbox = (self.x + 17, self.y + 2, 31, 57)
+        self.health = 10
+        self.rect = self.walkLeft[self.walkCount].get_rect()
+        self.mask = pygame.mask.from_surface(self.walkRight[0])
+        self.rect.x = self.x
+        self.rect.y = self.y
+        self.health = vida
+        self.dano = dano
+        self.direcao = direcao
+
+    def draw(self):
+        self.move()
+        if self.walkCount + 1 >= 33:
             self.walkCount = 0
-            self.vel = 3
-            self.hitbox = (self.x + 17, self.y + 2, 31, 57)
-            self.health = 10
-            self.rect = self.walkRight[self.walkCount].get_rect()
+
+        if self.vel * self.direcao > 0:
+            tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
+            self.walkCount += 1
+            self.mask = pygame.mask.from_surface(self.walkRight[0])
+
+        else:
+            tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
+            self.walkCount += 1
             self.mask = pygame.mask.from_surface(self.walkLeft[0])
-            self.rect.x = self.x
-            self.rect.y = self.y
-            self.health = vida
-            self.dano = dano
 
-        def draw(self):
-            self.move()
-            if self.walkCount + 1 >= 33:
-                self.walkCount = 0   
-
-            if self.vel > 0:
-                tela.blit(self.walkLeft[self.walkCount //3], (self.x, self.y))
-                self.walkCount += 1
-                self.mask = pygame.mask.from_surface(self.walkRight[0])
-
+    def move(self):
+        if self.vel * self.direcao > 0:
+            if self.x < self.path[1] + self.vel:
+                self.x += self.vel * self.direcao
             else:
-                tela.blit(self.walkRight[self.walkCount //3], (self.x, self.y))
-                self.walkCount += 1
-                self.mask = pygame.mask.from_surface(self.walkLeft[0])
-
-
-        def move(self):
-            if self.vel > 0:
-                if self.x + self.vel < self.path[1]:
-                    if self.x > player.x:
-                        self.x -= self.vel
-                    else:
-                        self.x += self.vel
-
-                else:
-                    self.vel = self.vel * -1
-                    self.walkCount = 0
+                self.vel = self.vel * -1
+                self.x += self.vel * self.direcao
+                self.walkCount = 0
+        else:
+            if self.x + self.vel > self.path[0]:
+                self.x += self.vel * self.direcao
             else:
-                if self.x - self.vel > self.path[0]:
-                    self.x += self.vel
-                else:
-                    self.vel = self.vel * -1
-                    self.walkCount = 0
-            self.rect.x = self.x
-            self.rect.y = self.y
+                self.vel = self.vel * -1
+                self.walkCount = 0
 
-        numero = 0
-        def hit(self, bala, acertos):
-            if self.health > 0:
-                self.health -= self.dano
-                for bala in acertos:
-                    print('hello there')
-            else:
-                pygame.sprite.spritecollide(bala, mobs, True)
-                morte.append(1)
-                print(len(morte))
-                print('morreu')
-                
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def hit(self, bala, acertos):
+        if self.health > 0:
+            self.health -= self.dano
+        else:
+            pygame.sprite.spritecollide(bala, mobs, True)
+            morte.append(1)
+
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
 mobs = pygame.sprite.Group()
 
 def texto(texto, fonte, cor):
@@ -342,7 +335,7 @@ def pause():
         pygame.display.update()
     relogio.tick(5)
     pause = True
-       
+
 def tela_morte():
     while True:
         for event in pygame.event.get():
@@ -352,24 +345,28 @@ def tela_morte():
             TextSurf, TextRect = texto('faleceu', texto_grande, branco)
             TextRect.center = ((comprimento_display/2), (altura_display/2))
             tela.blit(TextSurf, TextRect)
-            
+
             if pontuacao[0] > int(HighScore_antigo):
                 fonte_highscore = pygame.font.SysFont(None, 50)
-                texto_seuscore = fonte_highscore.render("Sua Pontuação: "+str(pontuacao[0]), True, branco)
-                texto_highscore = fonte_highscore.render("Highscore: "+str(pontuacao[0]), True, branco)
+                texto_seuscore = fonte_highscore.render(
+                    "Sua Pontuação: "+str(pontuacao[0]), True, branco)
+                texto_highscore = fonte_highscore.render(
+                    "Highscore: "+str(pontuacao[0]), True, branco)
 
                 with open('HighScore.txt', 'w') as arquivo:
-                    arquivo.write(str(pontuacao[0])) 
+                    arquivo.write(str(pontuacao[0]))
 
             else:
                 fonte_highscore = pygame.font.SysFont(None, 50)
-                texto_seuscore = fonte_highscore.render("Sua Pontuação: "+str(pontuacao[0]), True, branco)
-                texto_highscore = fonte_highscore.render("Highscore: "+str(HighScore_antigo), True, branco)
-                
+                texto_seuscore = fonte_highscore.render(
+                    "Sua Pontuação: "+str(pontuacao[0]), True, branco)
+                texto_highscore = fonte_highscore.render(
+                    "Highscore: "+str(HighScore_antigo), True, branco)
+
             tela.blit(texto_seuscore,(15,15))
             tela.blit(texto_highscore,(50,50))
             if butao('Jogar Novamente', 318,425,75,25,(0,255,0),(128,128,128)):
-                pontuacao[0] = 0                 
+                pontuacao[0] = 0
                 return 2
             if butao('sair', 318,475,75,25,(255,0,0),(128,128,128)):
                 return -1
@@ -397,7 +394,6 @@ def menu():
 
         pygame.display.update()
         relogio.tick(15)
-        
 
 def Controles(pausado):
     while True:
@@ -423,7 +419,7 @@ def Controles(pausado):
             if butao('retornar ao jogo',318,450,75,25,(0,255,0),(128,128,128)):
                 tela.blit(background,[0,0])
                 return 4
-        
+
         else:
             tela.blit(tela_menu,[0,0])
             TextSurf, TextRect = texto('Controles', texto_grande, branco)
@@ -452,7 +448,7 @@ def Comeco():
             if evento.type == pygame.QUIT:
                 return -1
 
-        
+
         tela.fill(preto)
         TextSurf, TextRect = texto('Vamos Começar?', texto_grande, branco)
         TextRect.center = ((375), (75))
@@ -465,7 +461,7 @@ def Comeco():
         pygame.display.update()
         relogio.tick(15)
 
-            
+
 def character():
 
     global player
@@ -492,44 +488,44 @@ def character():
         if butao('Bahia',50,250,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador1)
             return 6
-       
+
 
         if butao('Alê',150,250,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador2)
             return 6
-         
+
 
         if butao('Terhorst',250,250,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador3)
             print('ma oe')
             return 6
-           
+
 
         if butao('Abel',350,250,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador4)
             return 6
-            
+
 
         if butao('Weiser',450,250,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador5)
             return 6
-           
+
 
         if butao('Balkins',550,250,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador6)
             return 6
-           
+
 
         if butao('Duds',650,250,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador7)
             return 6
-            
+
 
         if butao('Luvi',400,350,75,25,(0,255,0),(128,128,128)):
             player = Neguinho((0,475),jogador8)
             return 6
-            
-            
+
+
 
 
         pygame.display.update()
@@ -553,26 +549,37 @@ def ScoreBoard(grupo,mobz,pontuacao):
         resultado = grupo - len(mobz)
         print('resultado vale {0}'.format(resultado))
         pontuacao[0] += (15*resultado)
-        print('pontuação é: {0}'.format(pontuacao[0]))  
+        print('pontuação é: {0}'.format(pontuacao[0]))
     fonte_score = pygame.font.SysFont(None, 25)
     texto_score = fonte_score.render("Pontuação: "+str(pontuacao[0]), True, preto)
     tela.blit(texto_score,(15,15))
 
-    pygame.display.update()  
-
-    print('WORKING')  
+    pygame.display.update()
 
     return 1
 
 pontuacao = [0]
+
 def jogo():
+
+    contador_imagem = 'comeco'
 
     contador_imagem = 'comeco'
 
     reinicio = True
 
+    for w in range(8):
+        x = random.randrange(100,600)
+        lista_x.append(x)
+    for i in range(8):
+        for o in lista_x:
+            direcao_inicial = random.uniform(0, 1)
+            direcao_inicial = (direcao_inicial * 2) - 1
+            m = MOBs(o,490,52,52,690, vida1, dano1, direcao_inicial)
+            mobs.add(m)
+            if len(mobs) > 8 or len(mobs) > 7:
+                break
 
-    
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -580,14 +587,13 @@ def jogo():
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_p:
                     pause()
-
-                if evento.key == pygame.K_d: 
+                if evento.key == pygame.K_d:
                     direcao = 1
                 if evento.key == pygame.K_a:
                     direcao = -1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
                     if len(group_tiros) <= 5:
-                        pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
+                        # pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
                         group_tiros.add(
                             Tiro((player.rect.x + (player.rect.width /2)),\
                                  (player.rect.y + 45), 7, VELOCIDADE, direcao))
@@ -600,10 +606,10 @@ def jogo():
                 lista_x.append(x)
             for i in range(8):
                 for o in lista_x:
-                    m = MOBs(o,490,52,52,690, vida1, dano1)
+                    m = MOBs(o,490,52,52,690, vida1, dano1, direcao_inicial)
                     mobs.add(m)
                     contador_imagem = 0
-                    if len(mobs) > 8 or len(mobs) > 7: 
+                    if len(mobs) > 8 or len(mobs) > 7:
                         break
 
         grupo_mobs = len(mobs)
@@ -615,27 +621,23 @@ def jogo():
             for w in range(random.randrange(11,20)):
                 x = random.randrange(100,600)
                 lista_x.append(x)
-                for i in range(15):  
+                for i in range(15):
                     for o in lista_x:
-                        m = MOBs(o,490,52,52,690, vida1, dano1)
+                        m = MOBs(o,490,52,52,690, vida1, dano1, direcao_inicial)
                         mobs.add(m)
                         grupo_mobs = len(mobs)
                         if len(mobs) > 8 or len(mobs) > 7:
-                            break 
+                            break
 
 
         for mob in mobs:
-            for morte in pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_mask):
-                print('vc morreu')
+            mortes = pygame.sprite.spritecollide(
+                player, mobs, True, pygame.sprite.collide_mask)
+            for morte in mortes:
                 return -2
-            if mob.rect.x + 52 >= player.rect.x and mob.rect.x <= player.rect.x:
-                vida_player -= dano_mob
-                if vida_player == 0:
-                    print('faleceu')
-                    reinicio = False
-                    return -2
-                    break
-            balas_atingidas = pygame.sprite.spritecollide(mob, group_tiros, True)
+
+            balas_atingidas = pygame.sprite.spritecollide(
+                    mob, group_tiros, True, pygame.sprite.collide_mask)
             for bala in balas_atingidas:
                 mob.hit(bala, balas_atingidas)
                 if player.x < mob.x:
@@ -651,8 +653,8 @@ def jogo():
                 player.rect.y =  475
 
 
-        background_novo = backgrounds[contador_imagem]              
-        
+        background_novo = backgrounds[contador_imagem]
+
         if len(lista_x) > 8:
             tela.blit(background_novo, [0,0])
 
@@ -665,7 +667,7 @@ def jogo():
         for bixo in mobs:
             bixo.draw()
 
-        
+
 
         ScoreBoard(grupo_mobs,mobs,pontuacao)
         player.update()
@@ -687,17 +689,17 @@ def gameloop():
     while estado != -1:
         if estado == -2:
             estado = tela_morte()
-        
+
         elif estado == -3:
             estado = nova_tela_morte()
-        
+
         elif estado == 0:
             estado = menu()
 
         elif estado == 1:
             estado = jogo()
-        
-        elif estado == 2: 
+
+        elif estado == 2:
             estado = reiniciar()
 
         elif estado == 3:
@@ -714,8 +716,6 @@ def gameloop():
             estado = Comeco()
 
 
-        
-            
 gameloop()
 pygame.quit()
 
