@@ -736,7 +736,6 @@ pygame.quit()
 #http://xorobabel.blogspot.com/2012/10/pythonpygame-2d-animation-jrpg-style.html
 #https://www.piskelapp.com/p/agxzfnBpc2tlbC1hcHByEwsSBlBpc2tlbBiAgMDv7uTTCQw/edit
 #https://www.youtube.com/watch?v=33g62PpFwsE
-#https://github.com/techwithtim/pygame-tutorials
 #https://github.com/techwithtim/pygame-tutorials/tree/master/Game
 #https://stackoverflow.com/questions/16643922/making-sprite-jump-in-pygame
 #https://pt.stackoverflow.com/questions/252228/duvida-sobre-keypress-no-pygame
@@ -746,3 +745,4 @@ pygame.quit()
 #https://www.google.com.br/search?sa=G&hl=pt-BR&q=game+main+menu+background&tbm=isch&source=iu&ictx=1&tbs=simg:CAESpQIJM5cGpO3Q_1EIamQILEKjU2AQaBAgVCAEMCxCwjKcIGmIKYAgDEijoFbgOkwvnFYIYuQ7vF7wMtw6wDLUttiDLLcgkrDeFIKo35CjRLLktGjAObNI18WQPF8LP_1yFwI5cZmdTyZcMfGWj_1uOE-8PZlJcvfToq3P6vbEbLhjN0yVwsgBAwLEI6u_1ggaCgoICAESBHHqu8oMCxCd7cEJGoQBChsKCGRhcmtuZXNz2qWI9gMLCgkvbS8wMWt5cjgKGQoGdHVubmVs2qWI9gMLCgkvbS8wMTU4dnQKGAoFYWxsZXnapYj2AwsKCS9tLzAxbHdmMAoYCgVuaWdodNqliPYDCwoJL20vMDFkNzR6ChYKBG1vb27apYj2AwoKCC9tLzA0d3ZfDA&fir=lLSdo9A7PLTkmM%253A%252CdF4C12fj2cLJqM%252C_&usg=__7nxX67Bl9R8HJKSDRZhcOW2H-vA%3D&ved=0ahUKEwiQvdv0ztHbAhVDDJAKHVyRDYsQ9QEIQDAC#imgrc=lLSdo9A7PLTkmM:
 #Music: Eric Skiff - Song Name - Resistor Anthems - Available at
 #http://ericskiff.com/music
+#https://www.youtube.com/watch?v=ujOTNg17LjI&list=PLQVvvaa0QuDdLkP8MrOXLe_rKuf6r80KO
