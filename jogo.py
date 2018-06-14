@@ -81,9 +81,6 @@ class Tiro(pygame.sprite.Sprite):
 	def update(self):
 
 		self.rect.x += self.vel
-		if self.rect.y <= 50:
-
-			self.rect.y = 50
 
 		if self.rect.x < 0 or self.rect.x > comprimento_display:
 			
@@ -189,7 +186,8 @@ class Neguinho(pygame.sprite.Sprite):
 				self.directionx = 'right'
 
 			if event.key == pygame.K_w:
-				if self.rect.y == 475:
+				print('pulando')
+				if self.rect.y >= 475:
 					self.vy = -15
 					self.directiony = 'jump'
 
@@ -480,6 +478,8 @@ def Comeco():
 #criamos uma função para a seleção de personagens
 def character():
 	global player
+	global opcao
+	global all_sprites
 
 	while True:
 		for evento in pygame.event.get():
@@ -500,16 +500,19 @@ def character():
 
 		if butao('Bahia',170,270,75,25,(0,255,0),(128,128,128)):
 			player = Neguinho((0,475),jogador1)
+			opcao = jogador1
 			return 6
 
 
 		if butao('Alê',350,270,75,25,(0,255,0),(128,128,128)):
 			player = Neguinho((0,475),jogador2)
+			opcao = jogador2
 			return 6
 
 
 		if butao('Terhorst',550,270,75,25,(0,255,0),(128,128,128)):
 			player = Neguinho((0,475),jogador3)
+			opcao = jogador3
 			print('ma oe')
 			return 6
 
@@ -527,6 +530,8 @@ group_tiros = pygame.sprite.Group()
 
 #criamos uma função para reiniciar o jogo depois que o player morreu
 def reiniciar():
+	player.rect.x = 0
+	player.rect.y = 480
 	vida = 10
 	contador_imagem = 0
 	return 1
@@ -591,6 +596,7 @@ def jogo():
 								 (player.rect.y + 45), VELOCIDADE, direcao))
 
 			player.handle_event(evento)
+
 
 		if contador_imagem == 'comeco' and reinicio == True:
 			for w in range(8):
