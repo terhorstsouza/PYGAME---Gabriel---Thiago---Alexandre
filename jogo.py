@@ -186,14 +186,14 @@ class Neguinho(pygame.sprite.Sprite):
 				self.directionx = 'right'
 
 			if event.key == pygame.K_w:
-
+				print('pulando')
 				if self.rect.y >= 475:
 					self.vy = -15
 					self.directiony = 'jump'
 
 			if event.key == pygame.K_e:
 				if self.rect.x >= 728-(52*2):
-
+					print("Funcionando")
 
 		if event.type == pygame.KEYUP:
 
@@ -513,6 +513,7 @@ def character():
 		if butao('Terhorst',550,270,75,25,(0,255,0),(128,128,128)):
 			player = Neguinho((0,475),jogador3)
 			opcao = jogador3
+			print('ma oe')
 			return 6
 
 
@@ -540,9 +541,9 @@ def ScoreBoard(grupo,mobz,pontuacao):
 
 	if grupo > len(mobz):
 		resultado = grupo - len(mobz)
-
+		print('resultado vale {0}'.format(resultado))
 		pontuacao[0] += (15*resultado)
-
+		print('pontuação é: {0}'.format(pontuacao[0]))
 	fonte_score = pygame.font.SysFont(None, 25)
 	texto_score = fonte_score.render("Pontuação: "+str(pontuacao[0]), True, preto)
 	tela.blit(texto_score,(15,15))
