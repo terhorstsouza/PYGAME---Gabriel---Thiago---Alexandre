@@ -590,7 +590,7 @@ def jogo():
 
 				if pygame.key.get_pressed()[pygame.K_SPACE]:
 					if len(group_tiros) <= 5:
-						# pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
+						pygame.mixer.Sound.play(pygame.mixer.Sound("Gun+Silencer.wav"))
 						group_tiros.add(
 							Tiro((player.rect.x + (player.rect.width /2)),\
 								 (player.rect.y + 45), VELOCIDADE, direcao))
@@ -742,4 +742,6 @@ pygame.quit()
 #https://pt.stackoverflow.com/questions/252228/duvida-sobre-keypress-no-pygame
 #https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.DirtySprite
 #http://www.dsc.ufcg.edu.br/~pet/atividades/minicurso_pygame/MiniCursoPygame.pdf
+#https://www.google.com.br/search?hl=pt-BR&q=window&tbm=isch&source=iu&ictx=1&tbs=simg:CAESqgIJD4q3C-fKc_18angILEKjU2AQaAggVDAsQsIynCBphCl8IAxIn2QPUA9gDWPwL1gXvAowJ1wPzAqc1hzeIN_181_1TaDN-w1jD3UNecpGjANWzKRgAjt4lwHasVjO-9_1Ri-md_15tc135FCe1exQ1Ql_1xEZeJ1VRjSfSdy9bQ7uwgBAwLEI6u_1ggaCgoICAESBKshkZwMCxCd7cEJGowBChgKBndpbmRvd9qliPYDCgoIL20vMGQ0djQKFwoFaG91c2XapYj2AwoKCC9tLzAzam01ChYKBHdvb2TapYj2AwoKCC9tLzA4M3Z0Ch8KDGFyY2hpdGVjdHVyZdqliPYDCwoJL20vMDNuZm1xCh4KC3NjYWxlIG1vZGVs2qWI9gMLCgkvbS8wMXJoN3kM&fir=gEf1t5mOiwVmeM%253A%252C4aHRhjKqy13I0M%252C_&usg=__mnm23F3H2mk1YKJdMBL-H8iMXCM%3D&sa=X&ved=0ahUKEwjEg_aGy9HbAhUIlpAKHS7aDWsQ9QEIOTAC#imgrc=gEf1t5mOiwVmeM:
+#https://www.google.com.br/search?sa=G&hl=pt-BR&q=game+main+menu+background&tbm=isch&source=iu&ictx=1&tbs=simg:CAESpQIJM5cGpO3Q_1EIamQILEKjU2AQaBAgVCAEMCxCwjKcIGmIKYAgDEijoFbgOkwvnFYIYuQ7vF7wMtw6wDLUttiDLLcgkrDeFIKo35CjRLLktGjAObNI18WQPF8LP_1yFwI5cZmdTyZcMfGWj_1uOE-8PZlJcvfToq3P6vbEbLhjN0yVwsgBAwLEI6u_1ggaCgoICAESBHHqu8oMCxCd7cEJGoQBChsKCGRhcmtuZXNz2qWI9gMLCgkvbS8wMWt5cjgKGQoGdHVubmVs2qWI9gMLCgkvbS8wMTU4dnQKGAoFYWxsZXnapYj2AwsKCS9tLzAxbHdmMAoYCgVuaWdodNqliPYDCwoJL20vMDFkNzR6ChYKBG1vb27apYj2AwoKCC9tLzA0d3ZfDA&fir=lLSdo9A7PLTkmM%253A%252CdF4C12fj2cLJqM%252C_&usg=__7nxX67Bl9R8HJKSDRZhcOW2H-vA%3D&ved=0ahUKEwiQvdv0ztHbAhVDDJAKHVyRDYsQ9QEIQDAC#imgrc=lLSdo9A7PLTkmM:
 
