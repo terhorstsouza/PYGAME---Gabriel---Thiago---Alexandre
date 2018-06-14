@@ -233,7 +233,7 @@ class MOBs(pygame.sprite.Sprite):
 		self.end = end
 		self.path = [self.x, self.end]
 		self.walkCount = 0
-		self.vel = 3
+		self.vel = 13
 		self.hitbox = (self.x + 17, self.y + 2, 31, 57)
 		self.health = 10
 		self.rect = self.walkLeft[self.walkCount].get_rect()
@@ -613,6 +613,8 @@ def jogo():
 		grupo_mobs = len(mobs)
 
 		if len(mobs) == 0:
+			player.rect.x = 0
+			player.rect.y = 480
 			contador_imagem += 1
 			if contador_imagem == len(backgrounds):
 				contador_imagem = 0
